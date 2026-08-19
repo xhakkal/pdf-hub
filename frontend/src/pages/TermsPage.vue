@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full bg-background min-h-screen flex flex-col font-['Inter'] antialiased">
+  <div class="w-full bg-background min-h-screen flex flex-col antialiased">
     <!-- Main Content -->
     <main class="flex-grow max-w-3xl w-full mx-auto px-4 md:px-8 pt-[120px] pb-20 flex flex-col gap-8">
       <!-- Header -->

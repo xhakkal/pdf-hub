@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full bg-brand min-h-screen flex flex-col font-['Inter'] antialiased">
+  <div class="w-full bg-brand min-h-screen flex flex-col antialiased">
     <!-- Main Content -->
     <main class="flex-grow max-w-[1180px] w-full mx-auto px-4 md:px-8 pt-[116px] pb-20 flex flex-col gap-10">
       <!-- Hero Section -->
@@ -14,7 +14,7 @@
       </section>
 
       <!-- Advertisement Banner -->
-      <AdBanner :show-ads="true" />
+      <AdBanner :show-ads="true" placement="headerBanner" />
 
       <!-- Tab Selector -->
       <div class="flex justify-center">
@@ -303,7 +303,7 @@
       </section>
 
       <!-- Bottom Advertisement Banner -->
-      <AdBanner :show-ads="true" />
+      <AdBanner :show-ads="true" placement="footerBanner" />
     </main>
   </div>
 </template>

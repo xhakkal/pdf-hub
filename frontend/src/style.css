@@ -33,11 +33,15 @@ html, body {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
   background-color: var(--color-bg);
   background-image: radial-gradient(ellipse at top, #191919 0%, var(--color-bg) 42%);
   color: var(--color-text);
   line-height: 1.6;
+}
+
+h1, h2, h3, h4, button {
+  letter-spacing: -0.025em;
 }
 
 button {

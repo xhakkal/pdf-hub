@@ -4,13 +4,14 @@
  */
 
 export const ADSENSE_CONFIG = {
-  // Coloque seu ca-pub-xxxxx aqui após se registrar no Google AdSense
-  clientId: 'ca-pub-xxxxxxxxxxxxxxxx',
+  // ID da conta AdSense já carregada no index.html.
+  clientId: 'ca-pub-9678636402491491',
   adSlots: {
-    headerBanner: '1234567890',      // 728x90 Leaderboard
-    sidebarRect: '0987654321',       // 300x250 Medium Rectangle
-    footerBanner: '1111111111',      // 728x90 Leaderboard
-    mobileBanner: '2222222222'       // 320x50 Mobile Banner
+    // Preencha com os IDs criados no painel do AdSense para publicar anúncios pagos.
+    headerBanner: '',
+    sidebarRect: '',
+    footerBanner: '',
+    mobileBanner: ''
   },
   enabled: true  // Desabilitar para testes
 }
