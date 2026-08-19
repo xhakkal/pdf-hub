@@ -1,11 +1,12 @@
 <template>
   <div class="w-full bg-brand min-h-screen flex flex-col font-['Inter'] antialiased">
     <!-- Main Content -->
-    <main class="flex-grow max-w-[1120px] w-full mx-auto px-4 md:px-8 pt-[120px] pb-20 flex flex-col gap-12">
+    <main class="flex-grow max-w-[1180px] w-full mx-auto px-4 md:px-8 pt-[116px] pb-20 flex flex-col gap-10">
       <!-- Hero Section -->
-      <section class="text-center flex flex-col items-center gap-3 max-w-3xl mx-auto">
-        <h1 class="text-5xl md:text-6xl font-bold text-white tracking-tight leading-tight">
-          Converta qualquer arquivo em <span class="text-orange">segundos</span>
+      <section class="text-center flex flex-col items-center gap-4 max-w-3xl mx-auto">
+        <span class="uppercase tracking-[0.22em] text-xs font-bold text-orange">Conversor de arquivos online</span>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight">
+          Converta qualquer arquivo em <span class="text-orange">segundos.</span>
         </h1>
         <p class="text-lg md:text-xl text-muted max-w-xl">
           PDF, imagens, Word, Excel, PowerPoint, CSV e muito mais. Arraste, escolha o formato e converta instantaneamente.
@@ -17,13 +18,13 @@
 
       <!-- Tab Selector -->
       <div class="flex justify-center">
-        <div class="inline-flex bg-surface rounded-xl p-1 gap-1">
+        <div class="inline-flex bg-[#151515] border border-brand rounded-lg p-1 gap-1 shadow-lg">
           <button
             @click="activeTab = 'convert'"
             :class="[
-              'px-6 py-3 rounded-lg font-semibold text-sm transition-all',
+              'px-6 py-3 rounded-md font-bold text-sm transition-all',
               activeTab === 'convert'
-                ? 'bg-orange text-white shadow-[0_0_0_1px_rgba(251,146,60,0.3)]'
+                ? 'bg-orange text-black shadow-[0_0_0_1px_rgba(255,159,28,0.3)]'
                 : 'text-muted hover:text-white hover:bg-surface-hover'
             ]"
           >
@@ -32,9 +33,9 @@
           <button
             @click="activeTab = 'pdf-tools'"
             :class="[
-              'px-6 py-3 rounded-lg font-semibold text-sm transition-all',
+              'px-6 py-3 rounded-md font-bold text-sm transition-all',
               activeTab === 'pdf-tools'
-                ? 'bg-orange text-white shadow-[0_0_0_1px_rgba(251,146,60,0.3)]'
+                ? 'bg-orange text-black shadow-[0_0_0_1px_rgba(255,159,28,0.3)]'
                 : 'text-muted hover:text-white hover:bg-surface-hover'
             ]"
           >
@@ -46,11 +47,11 @@
       <!-- Conversion Interface (Tab: Conversão) -->
       <section v-if="activeTab === 'convert'" class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         <!-- Main Tool Area -->
-        <div class="lg:col-span-2 bg-elevated rounded-2xl border border-brand p-6 flex flex-col gap-6 shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+        <div class="lg:col-span-2 bg-elevated rounded-xl border border-brand p-6 flex flex-col gap-6 shadow-[0_12px_32px_rgba(0,0,0,0.34)]">
 
           <!-- Upload Drop Zone -->
           <div
-            class="border-2 border-dashed border-brand hover:border-orange hover:bg-surface transition-all duration-200 rounded-xl p-16 flex flex-col items-center justify-center text-center cursor-pointer group relative"
+            class="border-2 border-dashed border-brand hover:border-orange hover:bg-surface transition-all duration-200 rounded-lg p-16 flex flex-col items-center justify-center text-center cursor-pointer group relative"
             @click="$refs.fileInput.click()"
             @drop="handleDrop"
             @dragover.prevent
@@ -86,7 +87,7 @@
                 :class="[
                   'py-2 px-3 rounded-lg border-2 font-medium text-sm transition-all',
                   selectedFormats.includes(format)
-                    ? 'border-orange bg-orange text-white shadow-[0_0_0_1px_rgba(251,146,60,0.3)]'
+                    ? 'border-orange bg-orange text-black shadow-[0_0_0_1px_rgba(255,159,28,0.3)]'
                     : 'border-brand bg-surface text-white hover:border-orange hover:bg-surface-hover'
                 ]"
               >
@@ -100,10 +101,10 @@
             @click="handleConvert"
             :disabled="!selectedFile || selectedFormats.length === 0 || isConverting"
             :class="[
-              'w-full py-3 px-6 rounded-lg font-semibold text-white transition-all flex items-center justify-center gap-2',
+              'w-full py-3 px-6 rounded-md font-bold text-black transition-all flex items-center justify-center gap-2',
               isConverting || !selectedFile || selectedFormats.length === 0
                 ? 'bg-dim text-muted cursor-not-allowed'
-                : 'bg-orange hover:bg-orange-hover active:scale-95 shadow-[0_4px_16px_rgba(249,115,22,0.3)]'
+                : 'bg-orange hover-bg-orange active:scale-95 shadow-[0_4px_16px_rgba(255,159,28,0.25)]'
             ]"
           >
             <svg v-if="!isConverting" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,7 +145,7 @@
                 <div class="w-full flex flex-col gap-3 pt-4">
                   <button
                     @click="resetForm"
-                    class="w-full py-3 px-6 bg-orange hover:bg-orange-hover text-white font-semibold rounded-lg transition-all active:scale-95"
+                    class="w-full py-3 px-6 bg-orange hover-bg-orange text-black font-bold rounded-md transition-all active:scale-95"
                   >
                     Converter Outro
                   </button>
@@ -161,7 +162,7 @@
         </div>
 
         <!-- Status Panel (Sidebar) -->
-        <aside class="lg:col-span-1 bg-elevated rounded-2xl border border-brand p-6 flex flex-col gap-6 h-full shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+        <aside class="lg:col-span-1 bg-elevated rounded-xl border border-brand p-6 flex flex-col gap-6 h-full shadow-[0_12px_32px_rgba(0,0,0,0.34)]">
           <div class="border-b border-brand pb-4 flex items-center justify-between">
             <h2 class="text-lg font-semibold text-white">Informações</h2>
             <svg class="w-5 h-5 text-dim" fill="currentColor" viewBox="0 0 20 20">
@@ -182,7 +183,7 @@
       <!-- PDF Tools Interface (Tab: Ferramentas PDF) -->
       <section v-if="activeTab === 'pdf-tools'" class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         <!-- Main Tool Area -->
-        <div class="lg:col-span-2 bg-elevated rounded-2xl border border-brand p-6 flex flex-col gap-6 shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+        <div class="lg:col-span-2 bg-elevated rounded-xl border border-brand p-6 flex flex-col gap-6 shadow-[0_12px_32px_rgba(0,0,0,0.34)]">
 
           <!-- Tool Selector -->
           <div class="flex flex-col gap-2">
@@ -195,7 +196,7 @@
                 :class="[
                   'py-3 px-3 rounded-lg border-2 font-medium text-sm transition-all flex flex-col items-center gap-1',
                   activeTool === tool.id
-                    ? 'border-orange bg-orange text-white shadow-[0_0_0_1px_rgba(251,146,60,0.3)]'
+                    ? 'border-orange bg-orange text-black shadow-[0_0_0_1px_rgba(255,159,28,0.3)]'
                     : 'border-brand bg-surface text-white hover:border-orange hover:bg-surface-hover'
                 ]"
               >
@@ -266,7 +267,7 @@
                 <div class="w-full flex flex-col gap-3 pt-4">
                   <button
                     @click="resetToolForm"
-                    class="w-full py-3 px-6 bg-orange hover:bg-orange-hover text-white font-semibold rounded-lg transition-all active:scale-95"
+                    class="w-full py-3 px-6 bg-orange hover-bg-orange text-black font-bold rounded-md transition-all active:scale-95"
                   >
                     Nova Operação
                   </button>
@@ -283,7 +284,7 @@
         </div>
 
         <!-- Status Panel (Sidebar) -->
-        <aside class="lg:col-span-1 bg-elevated rounded-2xl border border-brand p-6 flex flex-col gap-6 h-full shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+        <aside class="lg:col-span-1 bg-elevated rounded-xl border border-brand p-6 flex flex-col gap-6 h-full shadow-[0_12px_32px_rgba(0,0,0,0.34)]">
           <div class="border-b border-brand pb-4 flex items-center justify-between">
             <h2 class="text-lg font-semibold text-white">Ferramentas</h2>
             <svg class="w-5 h-5 text-dim" fill="currentColor" viewBox="0 0 20 20">
