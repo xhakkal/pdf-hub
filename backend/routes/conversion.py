@@ -168,6 +168,7 @@ def get_formats():
 
 
 @conversion_bp.route('/health', methods=['GET'])
+@conversion_bp.route('/api/health', methods=['GET'])
 def health_check():
     """Verificar saúde da API."""
     return jsonify({'status': 'ok'}), 200

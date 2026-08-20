@@ -6,32 +6,32 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#003d9b',
-        'on-primary': '#ffffff',
-        'primary-container': '#0052cc',
-        'on-primary-container': '#c4d2ff',
-        secondary: '#0059b8',
-        'on-secondary': '#ffffff',
-        'secondary-container': '#0071e6',
-        'on-secondary-container': '#fefcff',
-        tertiary: '#3c454d',
-        'on-tertiary': '#ffffff',
-        'tertiary-container': '#535c65',
-        'on-tertiary-container': '#cbd4df',
-        error: '#ba1a1a',
-        'on-error': '#ffffff',
-        'error-container': '#ffdad6',
-        'on-error-container': '#93000a',
-        surface: '#faf9ff',
-        'on-surface': '#051a3e',
-        'surface-variant': '#d8e2ff',
-        'on-surface-variant': '#434654',
-        outline: '#737685',
-        'outline-variant': '#c3c6d6',
-        'background': '#faf9ff',
-        'on-background': '#051a3e',
+        // PDFhub brand colors (matching CSS custom properties in style.css)
+        primary: '#ff9f1c',           // --color-primary
+        'primary-hover': '#ffb13d',   // --color-primary-hover
+        'primary-light': '#ffe0a6',   // --color-primary-light
+        'primary-glow': 'rgba(255, 159, 28, 0.34)', // --color-primary-glow
+        surface: '#1d1d1d',           // --color-surface
+        'surface-hover': '#292929',   // --color-surface-hover
+        border: '#373737',            // --color-border
+        'border-hover': '#555555',    // --color-border-hover
+        bg: '#080808',                // --color-bg
+        'bg-elevated': '#121212',     // --color-bg-elevated
+        text: '#f5f5f5',              // --color-text
+        muted: '#b0b0b0',             // --color-text-muted
+        dim: '#777777',               // --color-text-dim
+        success: '#22c55e',           // --color-success
+        error: '#ef4444',             // --color-error
+        warning: '#f59e0b',           // --color-warning
+        // Semantic aliases for convenience
+        orange: '#ff9f1c',
+        'orange-hover': '#ffb13d',
+        brand: '#080808',
+        elevated: '#121212',
+        surface: '#1d1d1d',
       },
       fontFamily: {
+        'manrope': ['Manrope', 'Inter', 'sans-serif'],
         'inter': ['Inter', 'sans-serif'],
       },
     },

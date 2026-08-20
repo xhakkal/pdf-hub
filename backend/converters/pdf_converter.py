@@ -7,6 +7,7 @@ from docx import Document
 from docx.shared import Pt
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
+from utils.file_handler import create_output_dir
 
 class PDFConverter:
     def __init__(self, pdf_path):
@@ -16,24 +17,16 @@ class PDFConverter:
     def compress_pdf(self):
         """Comprime PDF reduzindo tamanho do arquivo."""
         try:
-            from pathlib import Path as PathlibPath
-
             reader = PdfReader(self.pdf_path)
             writer = PdfWriter()
 
             for page in reader.pages:
-                # Adicionar página ao writer (compressão padrão)
                 writer.add_page(page)
 
             output_filename = f"{self.pdf_filename}_compressed.pdf"
-            output_dir = os.path.dirname(self.pdf_path)
-            output_path = os.path.join(output_dir, '..', 'output', output_filename)
-            output_path = os.path.abspath(output_path)
+            output_dir = create_output_dir()
+            output_path = os.path.join(output_dir, output_filename)
 
-            # Garantir que o diretório existe
-            os.makedirs(os.path.dirname(output_path), exist_ok=True)
-
-            # Usar compressão ao escrever
             with open(output_path, 'wb') as output_file:
                 writer.write(output_file)
 
@@ -58,11 +51,8 @@ class PDFConverter:
                     writer.add_page(page)
 
             output_filename = f"{self.pdf_filename}_merged.pdf"
-            output_dir = os.path.dirname(self.pdf_path)
-            output_path = os.path.join(output_dir, '..', 'output', output_filename)
-            output_path = os.path.abspath(output_path)
-
-            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            output_dir = create_output_dir()
+            output_path = os.path.join(output_dir, output_filename)
 
             with open(output_path, 'wb') as output_file:
                 writer.write(output_file)
@@ -82,10 +72,7 @@ class PDFConverter:
             reader = PdfReader(self.pdf_path)
             total_pages = len(reader.pages)
             output_files = []
-            output_dir = os.path.dirname(self.pdf_path)
-            output_dir = os.path.join(output_dir, '..', 'output')
-            output_dir = os.path.abspath(output_dir)
-            os.makedirs(output_dir, exist_ok=True)
+            output_dir = create_output_dir()
 
             if split_mode == 'all':
                 # Cada página vira um arquivo
@@ -151,16 +138,13 @@ class PDFConverter:
             for i in range(total_pages):
                 page = reader.pages[i]
                 if i in page_indices:
-                    # Rotaciona a página
-                    page.rotate(rotation)
+                    # Rotaciona a página (PyPDF2 3.x+ usa .rotation)
+                    page.rotation = (page.rotation + rotation) % 360
                 writer.add_page(page)
 
             output_filename = f"{self.pdf_filename}_rotated.pdf"
-            output_dir = os.path.dirname(self.pdf_path)
-            output_path = os.path.join(output_dir, '..', 'output', output_filename)
-            output_path = os.path.abspath(output_path)
-
-            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            output_dir = create_output_dir()
+            output_path = os.path.join(output_dir, output_filename)
 
             with open(output_path, 'wb') as output_file:
                 writer.write(output_file)
@@ -188,24 +172,43 @@ class PDFConverter:
                     'black': (0, 0, 0),
                 }.get(color, (0.5, 0.5, 0.5))
 
-                # Inserir texto diagonalmente
-                text_rect = fitz.Rect(0, 0, page_rect.width, page_rect.height)
-                page.insert_text(
-                    text_rect.tl + (page_rect.width/2, page_rect.height/2),
+                # Calcular posição centralizada
+                point_x = page_rect.width / 2
+                point_y = page_rect.height / 2
+
+                # Calcular transformação para texto diagonal
+                half_width = min(font_size * len(watermark_text) * 0.4, page_rect.width * 0.6)
+                half_height = font_size * 1.5
+
+                # Criar retângulo centralizado para o texto
+                text_rect = fitz.Rect(
+                    point_x - half_width/2,
+                    point_y - half_height/2,
+                    point_x + half_width/2,
+                    point_y + half_height/2
+                )
+
+                # Inserir texto com opacidade e rotação diagonal
+                # PyMuPDF requer rotate múltiplo de 90; para ângulos arbitrários
+                # usamos uma matriz de transformação aplicada via morph
+                import math
+                rad = math.radians(angle)
+                # Matriz de rotação em torno do centro do retângulo
+                morph = (text_rect.tl, fitz.Matrix(math.cos(rad), math.sin(rad), -math.sin(rad), math.cos(rad), 0, 0))
+                page.insert_textbox(
+                    text_rect,
                     watermark_text,
                     fontsize=font_size,
                     color=text_color,
-                    overlay=True,
-                    render_mode=0,  # preenchido
-                    rotate=angle
+                    fill_opacity=opacity,
+                    stroke_opacity=opacity,
+                    align=fitz.TEXT_ALIGN_CENTER,
+                    morph=morph
                 )
 
             output_filename = f"{self.pdf_filename}_watermarked.pdf"
-            output_dir = os.path.dirname(self.pdf_path)
-            output_path = os.path.join(output_dir, '..', 'output', output_filename)
-            output_path = os.path.abspath(output_path)
-
-            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            output_dir = create_output_dir()
+            output_path = os.path.join(output_dir, output_filename)
 
             doc.save(output_path)
             doc.close()
@@ -232,7 +235,9 @@ class PDFConverter:
             if owner_password is None:
                 owner_password = user_password
 
-            # Configurar permissões padrão
+            # Converter dict de permissões para bitmask (PyPDF2)
+            # Bitmask: 4 = print, 8 = modify, 16 = copy, 32 = annotate
+            # Todos ON = 0b011100 = 28 (allow all)
             if permissions is None:
                 permissions = {
                     'print': True,
@@ -241,19 +246,26 @@ class PDFConverter:
                     'annotate': True
                 }
 
-            # Criptografar
+            permissions_flag = 0
+            if permissions.get('print', True):
+                permissions_flag |= 4
+            if permissions.get('modify', True):
+                permissions_flag |= 8
+            if permissions.get('copy', True):
+                permissions_flag |= 16
+            if permissions.get('annotate', True):
+                permissions_flag |= 32
+
+            # Criptografar com bitmask de permissões
             writer.encrypt(
                 user_password=user_password,
                 owner_password=owner_password,
-                permissions=permissions
+                permissions_flag=permissions_flag
             )
 
             output_filename = f"{self.pdf_filename}_protected.pdf"
-            output_dir = os.path.dirname(self.pdf_path)
-            output_path = os.path.join(output_dir, '..', 'output', output_filename)
-            output_path = os.path.abspath(output_path)
-
-            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            output_dir = create_output_dir()
+            output_path = os.path.join(output_dir, output_filename)
 
             with open(output_path, 'wb') as output_file:
                 writer.write(output_file)
@@ -261,16 +273,13 @@ class PDFConverter:
             return [output_path], None
         except Exception as e:
             return None, f"Erro ao proteger PDF: {str(e)}"
-    
+
     def to_images(self, format='PNG', dpi=150):
         """Converte PDF para imagens (PNG ou JPG) usando PyMuPDF."""
         try:
             doc = fitz.open(self.pdf_path)
             output_files = []
-            output_dir = os.path.dirname(self.pdf_path)
-            output_dir = os.path.join(output_dir, '..', 'output')
-            output_dir = os.path.abspath(output_dir)
-            os.makedirs(output_dir, exist_ok=True)
+            output_dir = create_output_dir()
 
             zoom = dpi / 72
             mat = fitz.Matrix(zoom, zoom)
@@ -301,26 +310,23 @@ class PDFConverter:
                 for page_num, page in enumerate(pdf_reader.pages, 1):
                     extracted = page.extract_text()
                     text += extracted + "\n"
-            
+
             output_filename = f"{self.pdf_filename}.txt"
-            output_dir = os.path.dirname(self.pdf_path)
-            output_dir = os.path.join(output_dir, '..', 'output')
-            output_dir = os.path.abspath(output_dir)
-            os.makedirs(output_dir, exist_ok=True)
+            output_dir = create_output_dir()
             output_path = os.path.join(output_dir, output_filename)
-            
+
             with open(output_path, 'w', encoding='utf-8') as f:
                 f.write(text)
-            
+
             return [output_path], None
         except Exception as e:
             return None, f"Erro ao converter para TXT: {str(e)}"
-    
+
     def to_docx(self):
         """Converte PDF para DOCX."""
         try:
             doc = Document()
-            
+
             with open(self.pdf_path, 'rb') as file:
                 pdf_reader = PdfReader(file)
                 for page_num, page in enumerate(pdf_reader.pages, 1):
@@ -328,43 +334,37 @@ class PDFConverter:
                     if page_num > 1:
                         doc.add_page_break()
                     doc.add_paragraph(text)
-            
+
             output_filename = f"{self.pdf_filename}.docx"
-            output_dir = os.path.dirname(self.pdf_path)
-            output_dir = os.path.join(output_dir, '..', 'output')
-            output_dir = os.path.abspath(output_dir)
-            os.makedirs(output_dir, exist_ok=True)
+            output_dir = create_output_dir()
             output_path = os.path.join(output_dir, output_filename)
             doc.save(output_path)
-            
+
             return [output_path], None
         except Exception as e:
             return None, f"Erro ao converter para DOCX: {str(e)}"
-    
+
     def to_xlsx(self):
         """Converte PDF para XLSX."""
         try:
             wb = Workbook()
             ws = wb.active
             ws.title = "PDF Data"
-            
+
             row = 1
             with open(self.pdf_path, 'rb') as file:
                 pdf_reader = PdfReader(file)
                 for page_num, page in enumerate(pdf_reader.pages, 1):
                     text = page.extract_text()
                     lines = text.split('\n')
-                    
+
                     for line in lines:
                         if line.strip():
                             ws[f'A{row}'] = line
                             row += 1
-            
+
             output_filename = f"{self.pdf_filename}.xlsx"
-            output_dir = os.path.dirname(self.pdf_path)
-            output_dir = os.path.join(output_dir, '..', 'output')
-            output_dir = os.path.abspath(output_dir)
-            os.makedirs(output_dir, exist_ok=True)
+            output_dir = create_output_dir()
             output_path = os.path.join(output_dir, output_filename)
             wb.save(output_path)
             

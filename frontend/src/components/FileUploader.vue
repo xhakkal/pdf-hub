@@ -107,11 +107,22 @@ export default {
       // Verificar tipo MIME ou extensão
       const allowedTypes = this.accept.split(',').map(t => t.trim())
       const fileExt = '.' + file.name.split('.').pop().toLowerCase()
+
+      // Verificar extensão primeiro (mais confiável)
+      const extMatch = allowedTypes.some(t => t.startsWith('.') && t === fileExt)
+      if (extMatch) return true
+
+      // Verificar MIME type
       const mimeMatch = allowedTypes.some(t => {
-        if (t.startsWith('.')) return t === fileExt
-        return file.type === t || file.type.startsWith(t.replace('*', ''))
+        if (t.startsWith('.')) return false
+        // Para wildcards como "image/*"
+        if (t.endsWith('/*')) {
+          return file.type.startsWith(t.slice(0, -1))
+        }
+        return file.type === t
       })
-      return mimeMatch || allowedTypes.includes(fileExt)
+
+      return mimeMatch
     },
     removeFile(index) {
       this.selectedFiles.splice(index, 1)

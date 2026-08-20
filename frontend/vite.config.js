@@ -11,5 +11,10 @@ export default defineConfig({
         changeOrigin: true
       }
     }
+  },
+  build: {
+    outDir: 'dist',
+    // Definir variável de ambiente para produção
+    // VITE_API_URL deve ser definido no build ou via env no deploy
   }
 })

@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div id="app" class="min-h-screen flex flex-col">
     <Header :active-page="activePage" @navigate="handleNavigate" />
     <main class="flex-grow">

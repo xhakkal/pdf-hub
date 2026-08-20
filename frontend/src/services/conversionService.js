@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// Em desenvolvimento usa localhost; em produção usa a variável de ambiente
-const API_URL = import.meta.env.VITE_API_URL || 'https://pdf-house.onrender.com/api'
+// Em desenvolvimento usa proxy Vite '/api'; em produção usa a variável de ambiente ou fallback
+const API_URL = import.meta.env.VITE_API_URL || '/api'
 
 export default {
   async convertFile(file, formats) {

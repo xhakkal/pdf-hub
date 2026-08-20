@@ -29,6 +29,10 @@ export default {
       return ADSENSE_CONFIG.clientId
     },
     slot() {
+      // Validar se o placement existe em adSlots
+      if (!this.placement || !ADSENSE_CONFIG.adSlots[this.placement]) {
+        return ''
+      }
       return ADSENSE_CONFIG.adSlots[this.placement] || ''
     }
   },

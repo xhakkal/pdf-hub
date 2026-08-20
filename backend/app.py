@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, send_from_directory, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 from routes.conversion import conversion_bp
@@ -10,8 +10,8 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Configurar CORS
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+# Configurar CORS - permitir todas as origens para desenvolvimento
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 # Registrar blueprints
 app.register_blueprint(conversion_bp)
@@ -19,25 +19,43 @@ app.register_blueprint(conversion_bp)
 # Inicializar diretórios
 ensure_temp_dir()
 
-# Rotas básicas
+# Servir arquivos estáticos do frontend (build do Vite)
 @app.route('/', methods=['GET'])
-def index():
-    return {
-        'message': 'PDF Converter API',
-        'version': '2.0.0',
-        'engine': 'pymupdf',
-        'endpoints': {
-            'convert': 'POST /api/convert',
-            'health': 'GET /api/health'
-        }
-    }, 200
+def serve_frontend():
+    return send_from_directory('static', 'index.html')
+
+@app.route('/<path:path>', methods=['GET'])
+def serve_static(path):
+    return send_from_directory('static', path)
+
+# Health check endpoint
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    return jsonify({'status': 'ok'}), 200
 
 @app.before_request
 def before_request():
     """Executar antes de cada request."""
-    cleanup_temp()
+    # Cleanup movido para job periódico - não rodar a cada request
+    pass
+
+# Periodic cleanup job
+def start_cleanup_scheduler():
+    import threading
+    import time
+
+    def cleanup_loop():
+        while True:
+            time.sleep(3600)  # Run every hour
+            cleanup_temp()
+
+    thread = threading.Thread(target=cleanup_loop, daemon=True)
+    thread.start()
 
 if __name__ == '__main__':
+    # Iniciar scheduler de limpeza
+    start_cleanup_scheduler()
+
     port = int(os.getenv('FLASK_PORT', 5000))
     print(f"PDF HOUSE API v2.0 - engine=pymupdf - port={port}")
     app.run(debug=False, host='0.0.0.0', port=port)

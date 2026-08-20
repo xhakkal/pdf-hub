@@ -1,4 +1,5 @@
 import os
+import uuid
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -67,7 +68,7 @@ def save_upload(file):
         return None, msg
 
     ext = get_file_extension(file.filename)
-    filename = f"upload_{datetime.now().strftime('%Y%m%d_%H%M%S')}.{ext}"
+    filename = f"upload_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:8]}.{ext}"
     filepath = os.path.join(TEMP_DIR, filename)
 
     file.save(filepath)
