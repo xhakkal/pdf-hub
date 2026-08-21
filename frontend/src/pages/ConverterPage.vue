@@ -200,7 +200,7 @@
                     : 'border-brand bg-surface text-white hover:border-orange hover:bg-surface-hover'
                 ]"
               >
-                <LogoIcon size="md" />
+                <span class="text-2xl">{{ tool.emoji }}</span>
                 <span>{{ tool.name }}</span>
               </button>
             </div>
@@ -311,7 +311,6 @@
 <script>
 import ConversionStatus from '../components/ConversionStatus.vue'
 import AdBanner from '../components/AdBanner.vue'
-import LogoIcon from '../components/LogoIcon.vue'
 import conversionService from '../services/conversionService.js'
 
 // Lazy-load PDF tools to reduce initial bundle size
@@ -330,8 +329,7 @@ export default {
     PDFSplit,
     PDFRotate,
     PDFWatermark,
-    PDFProtect,
-    LogoIcon
+    PDFProtect
   },
   data() {
     return {
@@ -345,11 +343,11 @@ export default {
       toolEstimatedTime: null,
       toolProgressInterval: null,
       pdfTools: [
-        { id: 'merge', name: 'Unir PDFs' },
-        { id: 'split', name: 'Dividir' },
-        { id: 'rotate', name: 'Rotacionar' },
-        { id: 'watermark', name: 'Marca d\'Água' },
-        { id: 'protect', name: 'Proteger' }
+        { id: 'merge', name: 'Unir PDFs', emoji: '📄' },
+        { id: 'split', name: 'Dividir', emoji: '✂️' },
+        { id: 'rotate', name: 'Rotacionar', emoji: '🔄' },
+        { id: 'watermark', name: 'Marca d\'Água', emoji: '💧' },
+        { id: 'protect', name: 'Proteger', emoji: '🔒' }
       ],
       // Conversion
       selectedFile: null,

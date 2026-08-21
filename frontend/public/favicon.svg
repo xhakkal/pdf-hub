@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Halo dourado -->
-  <ellipse cx="32" cy="14" rx="16" ry="5" fill="none" stroke="#FFD700" stroke-width="3.5" opacity="0.95"/>
-  <!-- Brilho do halo -->
-  <ellipse cx="32" cy="14" rx="18" ry="6.5" fill="none" stroke="#FFE866" stroke-width="1" opacity="0.5"/>
-  <!-- Texto S estilizado -->
-  <text x="32" y="52" font-family="Georgia, serif" font-size="36" font-weight="900"
-        text-anchor="middle" fill="white" stroke="black" stroke-width="3" paint-order="stroke">S</text>
+  <!-- Fundo arredondado -->
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="#111111"/>
+  <!-- Texto PDF em laranja -->
+  <text x="32" y="42" font-family="Arial, sans-serif" font-size="22" font-weight="900"
+        text-anchor="middle" fill="#FF9F1C" letter-spacing="-1">PDF</text>
+  <!-- Pequeno acento "hub" -->
+  <rect x="40" y="14" width="12" height="6" rx="3" fill="#FF9F1C"/>
 </svg>
