@@ -10,8 +10,16 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Configurar CORS - permitir todas as origens para desenvolvimento
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+# Configurar CORS - permitir todas as origens
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True, allow_headers=["Content-Type", "Authorization"], methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+
+# Garantir headers CORS em todas as respostas (incluindo erros)
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
+    return response
 
 # Registrar blueprints
 app.register_blueprint(conversion_bp)
