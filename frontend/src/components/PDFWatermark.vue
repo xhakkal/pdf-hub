@@ -11,89 +11,114 @@
       @error="$emit('error', $event)"
     />
 
-    <div v-if="selectedFile" class="watermark-options">
-      <div class="field">
-        <label class="field-label">Texto da marca d'água *</label>
-        <input
-          v-model="watermarkText"
-          type="text"
-          placeholder="Ex: CONFIDENCIAL"
-          class="text-input"
-          maxlength="50"
-        />
-      </div>
-
-      <div class="field">
-        <label class="field-label">Cor</label>
-        <div class="color-options">
-          <button
-            v-for="color in colors"
-            :key="color.value"
-            @click="color = color.value"
-            :class="['color-btn', { active: color === color.value }]"
-            :style="{ backgroundColor: color.hex }"
-            :title="color.label"
+    <div v-if="selectedFile" class="tool-layout">
+      <!-- Painel de Controles (Esquerda) -->
+      <div class="controls-panel">
+        <div class="control-group">
+          <label class="control-label">Texto da Marca d'Água</label>
+          <input
+            v-model="watermarkText"
+            type="text"
+            placeholder="Ex: CONFIDENCIAL"
+            class="text-input"
+            maxlength="50"
           />
+          <p v-if="watermarkText" class="char-count">{{ watermarkText.length }}/50</p>
         </div>
+
+        <div class="control-group">
+          <label class="control-label">Cor</label>
+          <div class="color-options">
+            <button
+              v-for="color in colors"
+              :key="color.value"
+              @click="selectedColor = color.value"
+              :class="['color-btn', { active: selectedColor === color.value }]"
+              :style="{ backgroundColor: color.hex }"
+              :title="color.label"
+            />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">Opacidade</label>
+          <input
+            v-model.number="opacity"
+            type="range"
+            min="0.1"
+            max="1"
+            step="0.05"
+            class="range-input"
+          />
+          <span class="range-value">{{ Math.round(opacity * 100) }}%</span>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">Tamanho da Fonte</label>
+          <input
+            v-model.number="fontSize"
+            type="range"
+            min="24"
+            max="120"
+            step="4"
+            class="range-input"
+          />
+          <span class="range-value">{{ fontSize }}px</span>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">Ângulo</label>
+          <div class="angle-options">
+            <button
+              v-for="angleOption in angles"
+              :key="angleOption"
+              @click="angle = angleOption"
+              :class="['angle-btn', { active: angle === angleOption }]"
+            >
+              {{ angleOption }}°
+            </button>
+          </div>
+        </div>
+
+        <button
+          @click="handleWatermark"
+          :disabled="isProcessing || !watermarkText"
+          class="action-button primary"
+        >
+          <span class="btn-text">{{ isProcessing ? 'Processando...' : 'Adicionar Marca d\'Água' }}</span>
+          <svg v-if="!isProcessing" class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+        </button>
       </div>
 
-      <div class="field">
-        <label class="field-label">Tamanho da fonte</label>
-        <input
-          v-model.number="fontSize"
-          type="range"
-          min="24"
-          max="120"
-          step="4"
-          class="range-input"
+      <!-- Pré-visualização (Direita) -->
+      <div class="preview-panel">
+        <PDFPreview
+          :file="selectedFile"
         />
-        <span class="range-value">{{ fontSize }}px</span>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Ângulo</label>
-        <div class="angle-options">
-          <button
-            v-for="angleOption in angles"
-            :key="angleOption"
-            @click="angle = angleOption"
-            :class="['angle-btn', { active: angle === angleOption }]"
-          >
-            {{ angleOption }}°
-          </button>
-        </div>
       </div>
     </div>
 
-    <button
-      v-if="selectedFile && watermarkText"
-      @click="handleWatermark"
-      :disabled="isProcessing"
-      class="action-button primary"
-    >
-      <svg v-if="!isProcessing" class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-      </svg>
-      <span>{{ isProcessing ? 'Processando...' : 'Adicionar Marca d\'Água' }}</span>
-    </button>
-
-    <p v-if="selectedFile && !watermarkText" class="hint">
-      Digite o texto da marca d'água
+    <p v-else-if="selectedFile && !watermarkText" class="hint">
+      Digite o texto da marca d'água para habilitar
     </p>
   </div>
 </template>
 
 <script>
 import FileUploader from './FileUploader.vue'
+import PDFPreview from './PDFPreview.vue'
 
 export default {
   name: 'PDFWatermark',
-  components: { FileUploader },
+  components: { FileUploader, PDFPreview },
   data() {
     return {
       selectedFile: null,
       watermarkText: '',
-      color: 'gray',
+      selectedColor: 'gray',
+      opacity: 0.3,
       fontSize: 48,
       angle: 45,
       isProcessing: false,
@@ -126,10 +151,10 @@ export default {
       try {
         const options = {
           watermark_text: this.watermarkText,
-          opacity: 0.3,
+          opacity: this.opacity,
           angle: this.angle,
           font_size: this.fontSize,
-          color: this.color
+          color: this.selectedColor
         }
         await this.$emit('watermark', this.selectedFile, options)
       } finally {
@@ -160,26 +185,52 @@ export default {
   font-size: 14px;
 }
 
-.watermark-options {
+.tool-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 960px) {
+  .tool-layout {
+    grid-template-columns: 360px 1fr;
+    align-items: start;
+  }
+}
+
+.controls-panel {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 16px;
+  gap: 20px;
+  padding: 20px;
   background-color: var(--color-surface);
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid var(--color-border);
+  position: sticky;
+  top: 88px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
 }
 
-.field {
+.control-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
-.field-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #a3a3a3;
+.control-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.char-count {
+  margin: 0;
+  font-size: 11px;
+  color: #666;
+  text-align: right;
 }
 
 .text-input {
@@ -200,13 +251,13 @@ export default {
 
 .color-options {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .color-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   border: 3px solid var(--color-border);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -218,7 +269,7 @@ export default {
 
 .color-btn.active {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(255, 159, 28, 0.2);
 }
 
 .range-input {
@@ -240,7 +291,7 @@ export default {
 }
 
 .range-value {
-  font-size: 14px;
+  font-size: 13px;
   color: #737373;
   text-align: right;
 }
@@ -252,12 +303,12 @@ export default {
 }
 
 .angle-btn {
-  padding: 8px 16px;
+  padding: 10px 18px;
   border: 2px solid var(--color-border);
   border-radius: 8px;
   background-color: var(--color-bg-elevated);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
   color: #a3a3a3;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -271,18 +322,18 @@ export default {
 .angle-btn.active {
   border-color: var(--color-primary);
   background-color: var(--color-primary);
-  color: white;
+  color: #111;
 }
 
 .action-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
   padding: 14px 24px;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 10px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -290,18 +341,21 @@ export default {
 }
 
 .action-button.primary {
-  background-color: #f97316;
-  color: white;
-  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+  background: linear-gradient(135deg, #FF9F1C, #FFB84D);
+  color: #111;
+  box-shadow: 0 4px 16px rgba(255, 159, 28, 0.3);
 }
 
 .action-button.primary:hover:not(:disabled) {
-  background-color: #fb923c;
+  background: linear-gradient(135deg, #FFB84D, #FFD180);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 159, 28, 0.4);
 }
 
 .action-button:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
 
 .btn-icon {
@@ -309,10 +363,25 @@ export default {
   height: 20px;
 }
 
+.preview-panel {
+  min-height: 300px;
+}
+
+@media (min-width: 960px) {
+  .preview-panel {
+    position: sticky;
+    top: 88px;
+  }
+}
+
 .hint {
   margin: 0;
+  padding: 20px;
   color: #f59e0b;
   font-size: 13px;
   text-align: center;
+  background: rgba(245, 158, 11, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(245, 158, 11, 0.2);
 }
 </style>

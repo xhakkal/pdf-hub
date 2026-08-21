@@ -200,7 +200,7 @@
                     : 'border-brand bg-surface text-white hover:border-orange hover:bg-surface-hover'
                 ]"
               >
-                <span class="text-xl">{{ tool.icon }}</span>
+                <LogoIcon size="md" />
                 <span>{{ tool.name }}</span>
               </button>
             </div>
@@ -311,12 +311,15 @@
 <script>
 import ConversionStatus from '../components/ConversionStatus.vue'
 import AdBanner from '../components/AdBanner.vue'
-import PDFMerge from '../components/PDFMerge.vue'
-import PDFSplit from '../components/PDFSplit.vue'
-import PDFRotate from '../components/PDFRotate.vue'
-import PDFWatermark from '../components/PDFWatermark.vue'
-import PDFProtect from '../components/PDFProtect.vue'
+import LogoIcon from '../components/LogoIcon.vue'
 import conversionService from '../services/conversionService.js'
+
+// Lazy-load PDF tools to reduce initial bundle size
+const PDFMerge = () => import('../components/PDFMerge.vue')
+const PDFSplit = () => import('../components/PDFSplit.vue')
+const PDFRotate = () => import('../components/PDFRotate.vue')
+const PDFWatermark = () => import('../components/PDFWatermark.vue')
+const PDFProtect = () => import('../components/PDFProtect.vue')
 
 export default {
   name: 'ConverterPage',
@@ -327,7 +330,8 @@ export default {
     PDFSplit,
     PDFRotate,
     PDFWatermark,
-    PDFProtect
+    PDFProtect,
+    LogoIcon
   },
   data() {
     return {
@@ -341,11 +345,11 @@ export default {
       toolEstimatedTime: null,
       toolProgressInterval: null,
       pdfTools: [
-        { id: 'merge', name: 'Unir PDFs', icon: '📎' },
-        { id: 'split', name: 'Dividir', icon: '✂️' },
-        { id: 'rotate', name: 'Rotacionar', icon: '🔄' },
-        { id: 'watermark', name: 'Marca d\'Água', icon: '💧' },
-        { id: 'protect', name: 'Proteger', icon: '🔒' }
+        { id: 'merge', name: 'Unir PDFs' },
+        { id: 'split', name: 'Dividir' },
+        { id: 'rotate', name: 'Rotacionar' },
+        { id: 'watermark', name: 'Marca d\'Água' },
+        { id: 'protect', name: 'Proteger' }
       ],
       // Conversion
       selectedFile: null,

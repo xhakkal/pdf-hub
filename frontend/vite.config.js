@@ -14,7 +14,22 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    // Definir variável de ambiente para produção
-    // VITE_API_URL deve ser definido no build ou via env no deploy
+    chunkSizeWarningLimit: 1000, // Increase limit since pdf-tools loads lazily
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'pdf-tools': [
+            './src/components/PDFMerge.vue',
+            './src/components/PDFSplit.vue',
+            './src/components/PDFRotate.vue',
+            './src/components/PDFWatermark.vue',
+            './src/components/PDFProtect.vue',
+            './src/components/PDFPreview.vue'
+          ],
+          'pdfjs': ['pdfjs-dist'],
+          'vendor': ['axios', 'vue']
+        }
+      }
+    }
   }
 })

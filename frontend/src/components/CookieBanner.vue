@@ -13,7 +13,7 @@
             class="text-orange-400 hover:text-orange-300 underline cursor-pointer"
           >
             política de privacidade
-          </button>.
+          </button>
         </p>
       </div>
 

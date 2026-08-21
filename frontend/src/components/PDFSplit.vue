@@ -11,65 +11,83 @@
       @error="$emit('error', $event)"
     />
 
-    <div v-if="selectedFile" class="split-options">
-      <label class="radio-option">
-        <input type="radio" v-model="splitMode" value="all" name="split-mode" />
-        <span class="radio-label">Separar cada página em um arquivo</span>
-      </label>
+    <div v-if="selectedFile" class="tool-layout">
+      <!-- Painel de Controles (Esquerda) -->
+      <div class="controls-panel">
+        <div class="control-group">
+          <label class="control-label">Modo de Divisão</label>
 
-      <label class="radio-option">
-        <input type="radio" v-model="splitMode" value="range" name="split-mode" />
-        <span class="radio-label">Selecionar intervalos de páginas</span>
-      </label>
+          <label class="radio-option">
+            <input type="radio" v-model="splitMode" value="all" name="split-mode" />
+            <span class="radio-custom"></span>
+            <span class="radio-label">Separar cada página em um arquivo</span>
+          </label>
 
-      <div v-if="splitMode === 'range'" class="ranges-input">
-        <p class="input-hint">Exemplo: 1-3, 5-7, 10-12</p>
-        <input
-          v-model="pageRanges"
-          type="text"
-          placeholder="1-3,5-7,10-12"
-          class="text-input"
-        />
+          <label class="radio-option">
+            <input type="radio" v-model="splitMode" value="range" name="split-mode" />
+            <span class="radio-custom"></span>
+            <span class="radio-label">Selecionar intervalos de páginas</span>
+          </label>
+
+          <div v-if="splitMode === 'range'" class="ranges-input">
+            <p class="input-hint">Exemplo: 1-3, 5-7, 10-12</p>
+            <input
+              v-model="pageRanges"
+              type="text"
+              placeholder="1-3,5-7,10-12"
+              class="text-input"
+            />
+          </div>
+
+          <label class="radio-option">
+            <input type="radio" v-model="splitMode" value="every_n" name="split-mode" />
+            <span class="radio-custom"></span>
+            <span class="radio-label">A cada N páginas</span>
+          </label>
+
+          <div v-if="splitMode === 'every_n'" class="n-input">
+            <input
+              v-model.number="pagesPerFile"
+              type="number"
+              min="1"
+              max="100"
+              class="text-input small"
+              placeholder="5"
+            />
+            <span>páginas por arquivo</span>
+          </div>
+        </div>
+
+        <button
+          @click="handleSplit"
+          :disabled="isProcessing"
+          class="action-button primary"
+        >
+          <span class="btn-text">{{ isProcessing ? 'Processando...' : 'Dividir PDF' }}</span>
+          <svg v-if="!isProcessing" class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+          </svg>
+        </button>
       </div>
 
-      <label class="radio-option">
-        <input type="radio" v-model="splitMode" value="every_n" name="split-mode" />
-        <span class="radio-label">A cada N páginas</span>
-      </label>
-
-      <div v-if="splitMode === 'every_n'" class="n-input">
-        <input
-          v-model.number="pagesPerFile"
-          type="number"
-          min="1"
-          max="100"
-          class="text-input small"
-          placeholder="5"
+      <!-- Pré-visualização (Direita) -->
+      <div class="preview-panel">
+        <PDFPreview
+          :file="selectedFile"
+          :selected-pages="getPreviewPages"
         />
-        <span>páginas por arquivo</span>
       </div>
     </div>
-
-    <button
-      v-if="selectedFile"
-      @click="handleSplit"
-      :disabled="isProcessing"
-      class="action-button primary"
-    >
-      <svg v-if="!isProcessing" class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-      </svg>
-      <span>{{ isProcessing ? 'Processando...' : 'Dividir PDF' }}</span>
-    </button>
   </div>
 </template>
 
 <script>
 import FileUploader from './FileUploader.vue'
+import PDFPreview from './PDFPreview.vue'
 
 export default {
   name: 'PDFSplit',
-  components: { FileUploader },
+  components: { FileUploader, PDFPreview },
   data() {
     return {
       selectedFile: null,
@@ -77,6 +95,12 @@ export default {
       pageRanges: '',
       pagesPerFile: 5,
       isProcessing: false
+    }
+  },
+  computed: {
+    getPreviewPages() {
+      if (!this.pageRanges) return []
+      return this.pageRanges.split(',').map(s => s.trim()).filter(Boolean)
     }
   },
   methods: {
@@ -135,29 +159,95 @@ export default {
   font-size: 14px;
 }
 
-.split-options {
+.tool-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 960px) {
+  .tool-layout {
+    grid-template-columns: 360px 1fr;
+    align-items: start;
+  }
+}
+
+.controls-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background-color: var(--color-surface);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  position: sticky;
+  top: 88px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.control-group {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 16px;
-  background-color: var(--color-surface);
-  border-radius: 8px;
-  border: 1px solid var(--color-border);
+}
+
+.control-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .radio-option {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   cursor: pointer;
   font-size: 14px;
   color: #a3a3a3;
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.radio-option:hover {
+  background: rgba(255, 159, 28, 0.05);
+  color: #fff;
+}
+
+.radio-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border);
+  border-radius: 50%;
+  position: relative;
+  transition: all 0.2s;
+  flex-shrink: 0;
 }
 
 .radio-option input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--color-primary);
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-option input:checked + .radio-custom {
+  border-color: var(--color-primary);
+}
+
+.radio-option input:checked + .radio-custom::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-primary);
 }
 
 .radio-label {
@@ -165,11 +255,20 @@ export default {
 }
 
 .ranges-input, .n-input {
-  margin-left: 28px;
+  margin-left: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.n-input {
+  flex-direction: row;
+  align-items: center;
+  margin-top: 8px;
 }
 
 .input-hint {
-  margin: 0 0 8px;
+  margin: 0;
   font-size: 12px;
   color: #737373;
 }
@@ -192,26 +291,17 @@ export default {
 
 .text-input.small {
   width: 80px;
-  margin-right: 8px;
-}
-
-.n-input {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #a3a3a3;
 }
 
 .action-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
   padding: 14px 24px;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 10px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -219,22 +309,36 @@ export default {
 }
 
 .action-button.primary {
-  background-color: #f97316;
-  color: white;
-  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+  background: linear-gradient(135deg, #FF9F1C, #FFB84D);
+  color: #111;
+  box-shadow: 0 4px 16px rgba(255, 159, 28, 0.3);
 }
 
 .action-button.primary:hover:not(:disabled) {
-  background-color: #fb923c;
+  background: linear-gradient(135deg, #FFB84D, #FFD180);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 159, 28, 0.4);
 }
 
 .action-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
 .btn-icon {
   width: 20px;
   height: 20px;
+}
+
+.preview-panel {
+  min-height: 300px;
+}
+
+@media (min-width: 960px) {
+  .preview-panel {
+    position: sticky;
+    top: 88px;
+  }
 }
 </style>

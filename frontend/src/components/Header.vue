@@ -6,7 +6,7 @@
         @click="$emit('navigate', 'conversor')"
         class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
       >
-        <span class="brand-mark" aria-label="PDFhub"><span>PDF</span><strong>hub</strong></span>
+        <LogoIcon size="lg" aria-label="PDFhub" />
       </div>
 
       <!-- Navigation -->
@@ -39,8 +39,11 @@
 </template>
 
 <script>
+import LogoIcon from './LogoIcon.vue'
+
 export default {
   name: 'Header',
+  components: { LogoIcon },
   props: {
     activePage: {
       type: String,
@@ -54,25 +57,5 @@ export default {
 <style scoped>
 button {
   outline: none;
-}
-
-.brand-mark {
-  display: inline-flex;
-  align-items: center;
-  font-size: 1.5rem;
-  font-weight: 900;
-  letter-spacing: -0.09em;
-  line-height: 1;
-}
-
-.brand-mark > span { color: #f5f5f5; }
-
-.brand-mark > strong {
-  margin-left: 0.2em;
-  padding: 0.19em 0.32em 0.23em;
-  border-radius: 0.16em;
-  background: var(--color-primary);
-  color: #111;
-  letter-spacing: -0.08em;
 }
 </style>
