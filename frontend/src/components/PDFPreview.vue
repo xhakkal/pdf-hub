@@ -175,7 +175,8 @@ export default {
         canvas.height = viewport.height
 
         const context = canvas.getContext('2d')
-        context.fillStyle = '#1a1a1a'
+        // Clear canvas with white background for better PDF visibility
+        context.fillStyle = '#ffffff'
         context.fillRect(0, 0, canvas.width, canvas.height)
 
         await page.render({ canvasContext: context, viewport }).promise
@@ -237,7 +238,8 @@ export default {
           canvas.width = viewport.width
           canvas.height = viewport.height
           const context = canvas.getContext('2d')
-          context.fillStyle = '#1a1a1a'
+          // Clear canvas with white background for better PDF visibility
+          context.fillStyle = '#ffffff'
           context.fillRect(0, 0, canvas.width, canvas.height)
           await page.render({ canvasContext: context, viewport }).promise
 
@@ -365,7 +367,7 @@ export default {
   min-height: 300px;
   max-height: 500px;
   padding: 20px;
-  background: #0d0d0d;
+  background: #f5f5f5;
   overflow: auto;
 }
 
