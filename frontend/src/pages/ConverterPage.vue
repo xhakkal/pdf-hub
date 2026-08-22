@@ -309,16 +309,17 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import ConversionStatus from '../components/ConversionStatus.vue'
 import AdBanner from '../components/AdBanner.vue'
 import conversionService from '../services/conversionService.js'
 
 // Lazy-load PDF tools to reduce initial bundle size
-const PDFMerge = () => import('../components/PDFMerge.vue')
-const PDFSplit = () => import('../components/PDFSplit.vue')
-const PDFRotate = () => import('../components/PDFRotate.vue')
-const PDFWatermark = () => import('../components/PDFWatermark.vue')
-const PDFProtect = () => import('../components/PDFProtect.vue')
+const PDFMerge = defineAsyncComponent(() => import('../components/PDFMerge.vue'))
+const PDFSplit = defineAsyncComponent(() => import('../components/PDFSplit.vue'))
+const PDFRotate = defineAsyncComponent(() => import('../components/PDFRotate.vue'))
+const PDFWatermark = defineAsyncComponent(() => import('../components/PDFWatermark.vue'))
+const PDFProtect = defineAsyncComponent(() => import('../components/PDFProtect.vue'))
 
 export default {
   name: 'ConverterPage',
