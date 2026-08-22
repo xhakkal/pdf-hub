@@ -376,6 +376,7 @@ export default {
   border-radius: 4px;
   max-width: 100%;
   height: auto;
+  background: #ffffff;
 }
 
 .preview-thumbnails {
