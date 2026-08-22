@@ -96,6 +96,11 @@
       <div class="preview-panel">
         <PDFPreview
           :file="selectedFile"
+          :watermark-text="watermarkText"
+          :watermark-opacity="opacity"
+          :watermark-angle="angle"
+          :watermark-font-size="fontSize"
+          :watermark-color="selectedColor"
         />
       </div>
     </div>

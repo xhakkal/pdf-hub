@@ -77,6 +77,27 @@ export default {
     selectedPages: {
       type: Array,
       default: () => []
+    },
+    // Watermark props for preview
+    watermarkText: {
+      type: String,
+      default: ''
+    },
+    watermarkOpacity: {
+      type: Number,
+      default: 0.3
+    },
+    watermarkAngle: {
+      type: Number,
+      default: 45
+    },
+    watermarkFontSize: {
+      type: Number,
+      default: 48
+    },
+    watermarkColor: {
+      type: String,
+      default: 'gray'
     }
   },
   data() {
@@ -102,6 +123,26 @@ export default {
     },
     rotation() {
       this.renderPage()
+    },
+    watermarkText() {
+      this.renderPage()
+      this.renderThumbnails()
+    },
+    watermarkOpacity() {
+      this.renderPage()
+      this.renderThumbnails()
+    },
+    watermarkAngle() {
+      this.renderPage()
+      this.renderThumbnails()
+    },
+    watermarkFontSize() {
+      this.renderPage()
+      this.renderThumbnails()
+    },
+    watermarkColor() {
+      this.renderPage()
+      this.renderThumbnails()
     }
   },
   methods: {
@@ -138,9 +179,52 @@ export default {
         context.fillRect(0, 0, canvas.width, canvas.height)
 
         await page.render({ canvasContext: context, viewport }).promise
+
+        // Render watermark on top if text is provided
+        if (this.watermarkText && this.watermarkText.trim()) {
+          this.renderWatermark(context, viewport)
+        }
       } catch (err) {
         console.error('Erro ao renderizar página:', err)
       }
+    },
+    renderWatermark(context, viewport) {
+      // Save current context state
+      context.save()
+
+      // Get center of the page
+      const centerX = viewport.width / 2
+      const centerY = viewport.height / 2
+
+      // Translate to center
+      context.translate(centerX, centerY)
+
+      // Rotate
+      const angleRad = (this.watermarkAngle * Math.PI) / 180
+      context.rotate(angleRad)
+
+      // Set font
+      const fontSize = Math.min(this.watermarkFontSize, Math.min(viewport.width, viewport.height) * 0.1)
+      context.font = `bold ${fontSize}px Arial, sans-serif`
+      context.textAlign = 'center'
+      context.textBaseline = 'middle'
+
+      // Set color and opacity
+      const colorMap = {
+        'gray': [107, 114, 128],
+        'red': [239, 68, 68],
+        'blue': [59, 130, 246],
+        'green': [34, 197, 94],
+        'black': [31, 41, 55]
+      }
+      const [r, g, b] = colorMap[this.watermarkColor] || colorMap.gray
+      context.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.watermarkOpacity})`
+
+      // Draw watermark text
+      context.fillText(this.watermarkText, 0, 0)
+
+      // Restore context
+      context.restore()
     },
     async renderThumbnails() {
       if (!this.pdfDoc || this.pageCount <= 1) return
@@ -156,6 +240,11 @@ export default {
           context.fillStyle = '#1a1a1a'
           context.fillRect(0, 0, canvas.width, canvas.height)
           await page.render({ canvasContext: context, viewport }).promise
+
+          // Render watermark on thumbnails too
+          if (this.watermarkText && this.watermarkText.trim()) {
+            this.renderWatermark(context, viewport)
+          }
         }
       }
     },
