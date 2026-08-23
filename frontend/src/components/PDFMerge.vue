@@ -73,14 +73,14 @@ export default {
 
 .section-header h3 {
   margin: 0;
-  color: white;
+  color: var(--color-text);
   font-size: 18px;
   font-weight: 600;
 }
 
 .section-header p {
   margin: 4px 0 0;
-  color: #a3a3a3;
+  color: var(--color-text-muted);
   font-size: 14px;
 }
 
@@ -100,18 +100,20 @@ export default {
 }
 
 .action-button.primary {
-  background-color: #f97316;
+  background-color: var(--color-primary);
   color: white;
-  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 4px 16px var(--color-primary-glow);
 }
 
 .action-button.primary:hover:not(:disabled) {
-  background-color: #fb923c;
+  background-color: var(--color-primary-hover);
 }
 
 .action-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  background-color: var(--color-bg-dim);
+  color: var(--color-text-dim);
 }
 
 .btn-icon {
@@ -121,7 +123,7 @@ export default {
 
 .hint {
   margin: 0;
-  color: #f59e0b;
+  color: var(--color-warning);
   font-size: 13px;
   text-align: center;
 }

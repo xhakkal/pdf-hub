@@ -4,9 +4,9 @@
     <main class="flex-grow max-w-[1180px] w-full mx-auto px-4 md:px-8 pt-[116px] pb-20 flex flex-col gap-10">
       <!-- Hero Section -->
       <section class="text-center flex flex-col items-center gap-4 max-w-3xl mx-auto">
-        <span class="uppercase tracking-[0.22em] text-xs font-bold text-orange">Conversor de arquivos online</span>
-        <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight">
-          Converta qualquer arquivo em <span class="text-orange">segundos.</span>
+        <span class="uppercase tracking-[0.22em] text-xs font-bold text-red">Conversor de arquivos online</span>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-brand tracking-tight leading-tight">
+          Converta qualquer arquivo em <span class="text-red">segundos.</span>
         </h1>
         <p class="text-lg md:text-xl text-muted max-w-xl">
           PDF, imagens, Word, Excel, PowerPoint, CSV e muito mais. Arraste, escolha o formato e converta instantaneamente.
@@ -18,14 +18,14 @@
 
       <!-- Tab Selector -->
       <div class="flex justify-center">
-        <div class="inline-flex bg-[#151515] border border-brand rounded-lg p-1 gap-1 shadow-lg">
+        <div class="inline-flex bg-surface border border-brand rounded-lg p-1 gap-1 shadow-lg">
           <button
             @click="activeTab = 'convert'"
             :class="[
               'px-6 py-3 rounded-md font-bold text-sm transition-all',
               activeTab === 'convert'
-                ? 'bg-orange text-black shadow-[0_0_0_1px_rgba(255,159,28,0.3)]'
-                : 'text-muted hover:text-white hover:bg-surface-hover'
+                ? 'bg-red text-white shadow-red-glow'
+                : 'text-muted hover:text-brand hover:bg-surface-hover'
             ]"
           >
             Conversão
@@ -35,8 +35,8 @@
             :class="[
               'px-6 py-3 rounded-md font-bold text-sm transition-all',
               activeTab === 'pdf-tools'
-                ? 'bg-orange text-black shadow-[0_0_0_1px_rgba(255,159,28,0.3)]'
-                : 'text-muted hover:text-white hover:bg-surface-hover'
+                ? 'bg-red text-white shadow-red-glow'
+                : 'text-muted hover:text-brand hover:bg-surface-hover'
             ]"
           >
             Ferramentas PDF
@@ -47,20 +47,20 @@
       <!-- Conversion Interface (Tab: Conversão) -->
       <section v-if="activeTab === 'convert'" class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         <!-- Main Tool Area -->
-        <div class="lg:col-span-2 bg-elevated rounded-xl border border-brand p-6 flex flex-col gap-6 shadow-[0_12px_32px_rgba(0,0,0,0.34)]">
+        <div class="lg:col-span-2 bg-elevated rounded-xl border border-brand p-6 flex flex-col gap-6 shadow-[0_12px_32px_rgba(0,0,0,0.1)]">
 
           <!-- Upload Drop Zone -->
           <div
-            class="border-2 border-dashed border-brand hover:border-orange hover:bg-surface transition-all duration-200 rounded-lg p-16 flex flex-col items-center justify-center text-center cursor-pointer group relative"
+            class="border-2 border-dashed border-brand hover:border-red hover:bg-surface transition-all duration-200 rounded-lg p-16 flex flex-col items-center justify-center text-center cursor-pointer group relative"
             @click="$refs.fileInput.click()"
             @drop="handleDrop"
             @dragover.prevent
             @dragenter.prevent
           >
-            <svg class="w-12 h-12 text-orange mb-3 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-12 h-12 text-red mb-3 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9.172 2.828a1 1 0 011.656 0l4 4a1 1 0 11-1.414 1.414L11 6.414V15a1 1 0 11-2 0V6.414L6.586 8.828a1 1 0 111.414-1.414l4-4z" />
             </svg>
-            <h3 class="text-lg font-semibold text-white mb-1">Arraste e solte seu arquivo aqui</h3>
+            <h3 class="text-lg font-semibold text-brand mb-1">Arraste e solte seu arquivo aqui</h3>
             <p class="text-sm text-muted">ou clique para procurar no seu computador</p>
             <p class="text-xs text-dim mt-1">PDF · PNG · JPG · WEBP · DOCX · XLSX · PPTX · TXT · CSV</p>
             <input
@@ -78,7 +78,7 @@
 
           <!-- Format Selection -->
           <div class="flex flex-col gap-3">
-            <h4 class="text-lg font-semibold text-white">Formato de Saída</h4>
+            <h4 class="text-lg font-semibold text-brand">Formato de Saída</h4>
             <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
               <button
                 v-for="format in availableFormats"
@@ -87,8 +87,8 @@
                 :class="[
                   'py-2 px-3 rounded-lg border-2 font-medium text-sm transition-all',
                   selectedFormats.includes(format)
-                    ? 'border-orange bg-orange text-black shadow-[0_0_0_1px_rgba(255,159,28,0.3)]'
-                    : 'border-brand bg-surface text-white hover:border-orange hover:bg-surface-hover'
+                    ? 'border-red bg-red text-white shadow-red-glow'
+                    : 'border-brand bg-surface text-brand hover:border-red hover:bg-surface-hover'
                 ]"
               >
                 {{ format }}
@@ -96,15 +96,27 @@
             </div>
           </div>
 
+          <!-- Turnstile Captcha -->
+          <div v-if="selectedFile && selectedFormats.length > 0" class="flex justify-center">
+            <Turnstile
+              ref="turnstile"
+              :site-key="turnstileSiteKey"
+              theme="light"
+              @verify="onTurnstileVerify"
+              @expired="onTurnstileExpired"
+              @error="onTurnstileError"
+            />
+          </div>
+
           <!-- Action Button -->
           <button
             @click="handleConvert"
-            :disabled="!selectedFile || selectedFormats.length === 0 || isConverting"
+            :disabled="!selectedFile || selectedFormats.length === 0 || isConverting || !turnstileToken"
             :class="[
-              'w-full py-3 px-6 rounded-md font-bold text-black transition-all flex items-center justify-center gap-2',
-              isConverting || !selectedFile || selectedFormats.length === 0
+              'w-full py-3 px-6 rounded-md font-bold text-white transition-all flex items-center justify-center gap-2',
+              isConverting || !selectedFile || selectedFormats.length === 0 || !turnstileToken
                 ? 'bg-dim text-muted cursor-not-allowed'
-                : 'bg-orange hover-bg-orange active:scale-95 shadow-[0_4px_16px_rgba(255,159,28,0.25)]'
+                : 'bg-red hover-bg-red active:scale-95 shadow-red-glow'
             ]"
           >
             <svg v-if="!isConverting" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,19 +151,19 @@
                   </svg>
                 </div>
 
-                <h3 class="text-xl font-bold text-white">Pronto!</h3>
+                <h3 class="text-xl font-bold text-brand">Pronto!</h3>
                 <p class="text-center text-muted">Seu arquivo foi convertido com sucesso.</p>
 
                 <div class="w-full flex flex-col gap-3 pt-4">
                   <button
                     @click="resetForm"
-                    class="w-full py-3 px-6 bg-orange hover-bg-orange text-black font-bold rounded-md transition-all active:scale-95"
+                    class="w-full py-3 px-6 bg-red hover-bg-red text-white font-bold rounded-md transition-all active:scale-95"
                   >
                     Converter Outro
                   </button>
                   <button
                     @click="handleCloseSuccess"
-                    class="w-full py-3 px-6 bg-surface hover:bg-surface-hover text-white font-semibold rounded-lg transition-all active:scale-95 border border-brand"
+                    class="w-full py-3 px-6 bg-surface hover:bg-surface-hover text-brand font-semibold rounded-lg transition-all active:scale-95 border border-brand"
                   >
                     Fechar
                   </button>
@@ -162,20 +174,20 @@
         </div>
 
         <!-- Status Panel (Sidebar) -->
-        <aside class="lg:col-span-1 bg-elevated rounded-xl border border-brand p-6 flex flex-col gap-6 h-full shadow-[0_12px_32px_rgba(0,0,0,0.34)]">
+        <aside class="lg:col-span-1 bg-elevated rounded-xl border border-brand p-6 flex flex-col gap-6 h-full shadow-[0_12px_32px_rgba(0,0,0,0.1)]">
           <div class="border-b border-brand pb-4 flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-white">Informações</h2>
+            <h2 class="text-lg font-semibold text-brand">Informações</h2>
             <svg class="w-5 h-5 text-dim" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
             </svg>
           </div>
 
           <ul class="flex flex-col gap-4 text-sm text-muted">
-            <li><strong class="text-white">Tamanho máximo:</strong> 50 MB</li>
-            <li><strong class="text-white">Entrada:</strong> PDF, PNG, JPG, WEBP, GIF, BMP, DOCX, XLSX, PPTX, TXT, CSV</li>
-            <li><strong class="text-white">Saída:</strong> depende do tipo enviado</li>
-            <li><strong class="text-white">Segurança:</strong> Arquivos deletados após 1 hora</li>
-            <li><strong class="text-white">Múltiplos formatos:</strong> Receba um ZIP</li>
+            <li><strong class="text-brand">Tamanho máximo:</strong> 50 MB</li>
+            <li><strong class="text-brand">Entrada:</strong> PDF, PNG, JPG, WEBP, GIF, BMP, DOCX, XLSX, PPTX, TXT, CSV</li>
+            <li><strong class="text-brand">Saída:</strong> depende do tipo enviado</li>
+            <li><strong class="text-brand">Segurança:</strong> Arquivos deletados após 1 hora</li>
+            <li><strong class="text-brand">Múltiplos formatos:</strong> Receba um ZIP</li>
           </ul>
         </aside>
       </section>
@@ -183,11 +195,11 @@
       <!-- PDF Tools Interface (Tab: Ferramentas PDF) -->
       <section v-if="activeTab === 'pdf-tools'" class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         <!-- Main Tool Area -->
-        <div class="lg:col-span-2 bg-elevated rounded-xl border border-brand p-6 flex flex-col gap-6 shadow-[0_12px_32px_rgba(0,0,0,0.34)]">
+        <div class="lg:col-span-2 bg-elevated rounded-xl border border-brand p-6 flex flex-col gap-6 shadow-[0_12px_32px_rgba(0,0,0,0.1)]">
 
           <!-- Tool Selector -->
           <div class="flex flex-col gap-2">
-            <h4 class="text-lg font-semibold text-white">Selecione uma ferramenta</h4>
+            <h4 class="text-lg font-semibold text-brand">Selecione uma ferramenta</h4>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
               <button
                 v-for="tool in pdfTools"
@@ -196,8 +208,8 @@
                 :class="[
                   'py-3 px-3 rounded-lg border-2 font-medium text-sm transition-all flex flex-col items-center gap-1',
                   activeTool === tool.id
-                    ? 'border-orange bg-orange text-black shadow-[0_0_0_1px_rgba(255,159,28,0.3)]'
-                    : 'border-brand bg-surface text-white hover:border-orange hover:bg-surface-hover'
+                    ? 'border-red bg-red text-white shadow-red-glow'
+                    : 'border-brand bg-surface text-brand hover:border-red hover:bg-surface-hover'
                 ]"
               >
                 <span class="text-2xl">{{ tool.emoji }}</span>
@@ -261,19 +273,19 @@
                   </svg>
                 </div>
 
-                <h3 class="text-xl font-bold text-white">Pronto!</h3>
+                <h3 class="text-xl font-bold text-brand">Pronto!</h3>
                 <p class="text-center text-muted">Operação concluída com sucesso.</p>
 
                 <div class="w-full flex flex-col gap-3 pt-4">
                   <button
                     @click="resetToolForm"
-                    class="w-full py-3 px-6 bg-orange hover-bg-orange text-black font-bold rounded-md transition-all active:scale-95"
+                    class="w-full py-3 px-6 bg-red hover-bg-red text-white font-bold rounded-md transition-all active:scale-95"
                   >
                     Nova Operação
                   </button>
                   <button
                     @click="handleCloseToolSuccess"
-                    class="w-full py-3 px-6 bg-surface hover:bg-surface-hover text-white font-semibold rounded-lg transition-all active:scale-95 border border-brand"
+                    class="w-full py-3 px-6 bg-surface hover:bg-surface-hover text-brand font-semibold rounded-lg transition-all active:scale-95 border border-brand"
                   >
                     Fechar
                   </button>
@@ -284,20 +296,20 @@
         </div>
 
         <!-- Status Panel (Sidebar) -->
-        <aside class="lg:col-span-1 bg-elevated rounded-xl border border-brand p-6 flex flex-col gap-6 h-full shadow-[0_12px_32px_rgba(0,0,0,0.34)]">
+        <aside class="lg:col-span-1 bg-elevated rounded-xl border border-brand p-6 flex flex-col gap-6 h-full shadow-[0_12px_32px_rgba(0,0,0,0.1)]">
           <div class="border-b border-brand pb-4 flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-white">Ferramentas</h2>
+            <h2 class="text-lg font-semibold text-brand">Ferramentas</h2>
             <svg class="w-5 h-5 text-dim" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
             </svg>
           </div>
 
           <ul class="flex flex-col gap-4 text-sm text-muted">
-            <li><strong class="text-white">Unir PDFs:</strong> Combine múltiplos arquivos</li>
-            <li><strong class="text-white">Dividir:</strong> Separe páginas em arquivos</li>
-            <li><strong class="text-white">Rotacionar:</strong> Gire páginas 90°/180°/270°</li>
-            <li><strong class="text-white">Marca d'água:</strong> Texto personalizado</li>
-            <li><strong class="text-white">Proteger:</strong> Senha e permissões</li>
+            <li><strong class="text-brand">Unir PDFs:</strong> Combine múltiplos arquivos</li>
+            <li><strong class="text-brand">Dividir:</strong> Separe páginas em arquivos</li>
+            <li><strong class="text-brand">Rotacionar:</strong> Gire páginas 90°/180°/270°</li>
+            <li><strong class="text-brand">Marca d'água:</strong> Texto personalizado</li>
+            <li><strong class="text-brand">Proteger:</strong> Senha e permissões</li>
           </ul>
         </aside>
       </section>
@@ -312,6 +324,7 @@
 import { defineAsyncComponent } from 'vue'
 import ConversionStatus from '../components/ConversionStatus.vue'
 import AdBanner from '../components/AdBanner.vue'
+import Turnstile from '../components/Turnstile.vue'
 import conversionService from '../services/conversionService.js'
 
 // Lazy-load PDF tools to reduce initial bundle size
@@ -326,6 +339,7 @@ export default {
   components: {
     ConversionStatus,
     AdBanner,
+    Turnstile,
     PDFMerge,
     PDFSplit,
     PDFRotate,
@@ -359,7 +373,10 @@ export default {
       errorMessage: '',
       conversionProgress: 0,
       estimatedTime: null,
-      progressInterval: null
+      progressInterval: null,
+      // Turnstile
+      turnstileSiteKey: import.meta.env.VITE_TURNSTILE_SITE_KEY || '0x4AAAAAAAExampleKey',
+      turnstileToken: null
     }
   },
   methods: {
@@ -415,9 +432,27 @@ export default {
         this.selectedFormats.push(format)
       }
     },
+    // Turnstile methods
+    onTurnstileVerify(token) {
+      this.turnstileToken = token
+    },
+    onTurnstileExpired() {
+      this.turnstileToken = null
+    },
+    onTurnstileError() {
+      this.turnstileToken = null
+      this.errorMessage = 'Erro na verificação do captcha. Tente novamente.'
+      this.conversionStatus = 'error'
+    },
     async handleConvert() {
       if (!this.selectedFile || this.selectedFormats.length === 0) {
         this.errorMessage = 'Selecione um arquivo e pelo menos um formato'
+        this.conversionStatus = 'error'
+        return
+      }
+
+      if (!this.turnstileToken) {
+        this.errorMessage = 'Complete a verificação do captcha'
         this.conversionStatus = 'error'
         return
       }
@@ -438,7 +473,8 @@ export default {
 
       const result = await conversionService.convertFile(
         this.selectedFile,
-        this.selectedFormats
+        this.selectedFormats,
+        this.turnstileToken
       )
 
       this.isConverting = false
@@ -481,6 +517,10 @@ export default {
       this.errorMessage = ''
       this.conversionProgress = 0
       this.estimatedTime = null
+      this.turnstileToken = null
+      if (this.$refs.turnstile) {
+        this.$refs.turnstile.reset()
+      }
       if (this.progressInterval) clearInterval(this.progressInterval)
     },
     handleCloseSuccess() {

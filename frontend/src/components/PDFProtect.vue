@@ -211,14 +211,14 @@ export default {
 
 .section-header h3 {
   margin: 0;
-  color: white;
+  color: var(--color-text);
   font-size: 18px;
   font-weight: 600;
 }
 
 .section-header p {
   margin: 4px 0 0;
-  color: #a3a3a3;
+  color: var(--color-text-muted);
   font-size: 14px;
 }
 
@@ -258,7 +258,7 @@ export default {
 .control-label {
   font-size: 13px;
   font-weight: 600;
-  color: #fff;
+  color: var(--color-text);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -266,7 +266,7 @@ export default {
 .control-hint {
   margin: 0;
   font-size: 12px;
-  color: #737373;
+  color: var(--color-text-dim);
 }
 
 .password-wrapper {
@@ -289,15 +289,15 @@ export default {
   height: 32px;
   border: none;
   background: transparent;
-  color: #737373;
+  color: var(--color-text-dim);
   cursor: pointer;
   border-radius: 6px;
   transition: all 0.2s;
 }
 
 .password-toggle:hover {
-  color: #fff;
-  background: rgba(255, 159, 28, 0.1);
+  color: var(--color-text);
+  background: var(--color-primary-glow);
 }
 
 .password-toggle svg {
@@ -313,10 +313,10 @@ export default {
   letter-spacing: 0.05em;
 }
 
-.password-strength.strength-weak { color: #EF4444; }
-.password-strength.strength-fair { color: #F59E0B; }
-.password-strength.strength-good { color: #3B82F6; }
-.password-strength.strength-strong { color: #22C55E; }
+.password-strength.strength-weak { color: var(--color-error); }
+.password-strength.strength-fair { color: var(--color-warning); }
+.password-strength.strength-good { color: #3b82f6; }
+.password-strength.strength-strong { color: var(--color-success); }
 
 .text-input {
   width: 100%;
@@ -345,7 +345,7 @@ export default {
   align-items: center;
   gap: 10px;
   font-size: 14px;
-  color: #a3a3a3;
+  color: var(--color-text-muted);
   cursor: pointer;
   padding: 8px 10px;
   border-radius: 8px;
@@ -353,8 +353,8 @@ export default {
 }
 
 .permission-item:hover {
-  background: rgba(255, 159, 28, 0.05);
-  color: #fff;
+  background: var(--color-primary-glow);
+  color: var(--color-text);
 }
 
 .permission-custom {
@@ -386,7 +386,7 @@ export default {
   top: 2px;
   width: 5px;
   height: 10px;
-  border: solid #111;
+  border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -407,21 +407,23 @@ export default {
 }
 
 .action-button.primary {
-  background: linear-gradient(135deg, #FF9F1C, #FFB84D);
-  color: #111;
-  box-shadow: 0 4px 16px rgba(255, 159, 28, 0.3);
+  background-color: var(--color-primary);
+  color: white;
+  box-shadow: 0 4px 16px var(--color-primary-glow);
 }
 
 .action-button.primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #FFB84D, #FFD180);
+  background-color: var(--color-primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(255, 159, 28, 0.4);
+  box-shadow: 0 6px 20px var(--color-primary-glow);
 }
 
 .action-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
+  background-color: var(--color-bg-dim);
+  color: var(--color-text-dim);
 }
 
 .btn-icon {
@@ -443,7 +445,7 @@ export default {
 .hint {
   margin: 0;
   padding: 20px;
-  color: #f59e0b;
+  color: var(--color-warning);
   font-size: 13px;
   text-align: center;
   background: rgba(245, 158, 11, 0.1);

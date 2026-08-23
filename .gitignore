@@ -77,3 +77,173 @@ Thumbs.db
 .DS_Store
 .vercel
 .env*.local
+
+# Useless files
+*.tmp
+*.temp
+*.bak
+*.orig
+*.log
+*.pid
+*.lock
+.cache/
+.coverage/
+.nyc_output/
+*.map
+*.tsbuildinfo
+.eslintcache
+.stylelintcache
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.lnk
+*.url
+*.local
+*.swp
+*.swo
+*.swn
+*.swx
+*.swpx
+*.swp
+*.swo
+*~
+# Local history for Visual Studio Code
+.history/
+# MacOS
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+# Windows
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+# Vim
+*.swp
+*.swo
+*.swn
+*.swx
+*.swpx
+*~
+# Compiled Python files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+# Distribution / Packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+# PyInstaller
+*.manifest
+*.spec
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+# Translations
+*.mo
+*.pot
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+# Flask stuff:
+instance/
+.webassets-cache
+# Scrapy stuff:
+.scrapy
+# Sphinx documentation
+docs/_build/
+# PyBuilder
+target/
+# Jupyter Notebook
+.ipynb_checkpoints
+# IPython
+profile_default/
+ipython_config.py
+# pyenv
+.python-version
+# celery beat schedule file
+celerybeat-schedule
+# SageMath parsed files
+*.sage.py
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+# Spyder project settings
+.spyderproject
+.spyproject
+# Rope project settings
+.ropeproject
+# mkdocs documentation
+/site
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+# Pyre type checker
+.pyre/
+# IDEs
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.idea/
+*.iml
+*.ipr
+*.iws
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

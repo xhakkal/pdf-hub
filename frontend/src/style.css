@@ -2,24 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global styles — dark, high-contrast PDFhub theme */
+/* Global styles — clean white and red PDFhub theme */
 :root {
-  --color-bg: #080808;
-  --color-bg-elevated: #121212;
-  --color-surface: #1d1d1d;
-  --color-surface-hover: #292929;
-  --color-border: #373737;
-  --color-border-hover: #555555;
-  --color-primary: #ff9f1c;
-  --color-primary-hover: #ffb13d;
-  --color-primary-light: #ffe0a6;
-  --color-primary-glow: rgba(255, 159, 28, 0.34);
-  --color-text: #f5f5f5;
-  --color-text-muted: #b0b0b0;
-  --color-text-dim: #777777;
-  --color-success: #22c55e;      /* green-500 */
-  --color-error: #ef4444;        /* red-500 */
-  --color-warning: #f59e0b;      /* amber-500 */
+  --color-bg: #ffffff;
+  --color-bg-elevated: #fafafa;
+  --color-surface: #f5f5f5;
+  --color-surface-hover: #eeeeee;
+  --color-border: #e0e0e0;
+  --color-border-hover: #cccccc;
+  --color-primary: #dc2626;
+  --color-primary-hover: #b91c1c;
+  --color-primary-light: #fecaca;
+  --color-primary-glow: rgba(220, 38, 38, 0.15);
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+  --color-text-dim: #9ca3af;
+  --color-success: #16a34a;
+  --color-error: #dc2626;
+  --color-warning: #f59e0b;
 }
 
 * {
@@ -35,7 +35,6 @@ html, body {
 body {
   font-family: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
   background-color: var(--color-bg);
-  background-image: radial-gradient(ellipse at top, #191919 0%, var(--color-bg) 42%);
   color: var(--color-text);
   line-height: 1.6;
 }
@@ -116,26 +115,26 @@ input {
   color: var(--color-text-dim);
 }
 
-.text-orange {
+.text-red {
   color: var(--color-primary);
 }
 
-.bg-orange {
+.bg-red {
   background-color: var(--color-primary);
 }
 
 .bg-dim {
-  background-color: #3a3a3a;
+  background-color: #d1d5db;
 }
 
-.hover-bg-orange:hover {
+.hover-bg-red:hover {
   background-color: var(--color-primary-hover);
 }
 
-.border-orange {
+.border-red {
   border-color: var(--color-primary);
 }
 
-.shadow-orange-glow {
+.shadow-red-glow {
   box-shadow: 0 0 0 1px var(--color-primary), 0 0 20px var(--color-primary-glow);
 }

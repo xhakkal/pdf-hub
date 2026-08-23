@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, send_file
 import os
 import zipfile
 import traceback
+import requests
 from pathlib import Path
 
 from converters.pdf_converter import PDFConverter
@@ -10,6 +11,32 @@ from converters.document_converter import DocumentConverter
 from utils.file_handler import save_upload, remove_file, create_output_dir, get_file_extension
 
 conversion_bp = Blueprint('conversion', __name__, url_prefix='/api')
+
+# Turnstile secret key (configure via environment variable)
+TURNSTILE_SECRET_KEY = os.environ.get('TURNSTILE_SECRET_KEY', '')
+
+def verify_turnstile(token):
+    """Verify Turnstile token with Cloudflare."""
+    if not token:
+        return False
+    if not TURNSTILE_SECRET_KEY:
+        # If no secret key configured, skip verification (development mode)
+        return True
+
+    try:
+        response = requests.post(
+            'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+            data={
+                'secret': TURNSTILE_SECRET_KEY,
+                'response': token
+            },
+            timeout=10
+        )
+        result = response.json()
+        return result.get('success', False)
+    except Exception as e:
+        print(f"Turnstile verification error: {e}")
+        return False
 
 # Formatos de saída disponíveis por extensão do arquivo de entrada
 SUPPORTED_CONVERSIONS = {
@@ -99,6 +126,11 @@ def convert_file():
 
     if 'formats' not in request.form:
         return jsonify({'error': 'Nenhum formato selecionado'}), 400
+
+    # Verify Turnstile token
+    turnstile_token = request.form.get('turnstile_token')
+    if not verify_turnstile(turnstile_token):
+        return jsonify({'error': 'Falha na verificação de segurança. Tente novamente.'}), 400
 
     file = request.files['file']
     formats = request.form.getlist('formats')

@@ -179,14 +179,14 @@ export default {
 
 .section-header h3 {
   margin: 0;
-  color: white;
+  color: var(--color-text);
   font-size: 18px;
   font-weight: 600;
 }
 
 .section-header p {
   margin: 4px 0 0;
-  color: #a3a3a3;
+  color: var(--color-text-muted);
   font-size: 14px;
 }
 
@@ -226,7 +226,7 @@ export default {
 .control-label {
   font-size: 13px;
   font-weight: 600;
-  color: #fff;
+  color: var(--color-text);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -234,7 +234,7 @@ export default {
 .char-count {
   margin: 0;
   font-size: 11px;
-  color: #666;
+  color: var(--color-text-dim);
   text-align: right;
 }
 
@@ -274,7 +274,7 @@ export default {
 
 .color-btn.active {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(255, 159, 28, 0.2);
+  box-shadow: 0 0 0 3px var(--color-primary-glow);
 }
 
 .range-input {
@@ -297,7 +297,7 @@ export default {
 
 .range-value {
   font-size: 13px;
-  color: #737373;
+  color: var(--color-text-dim);
   text-align: right;
 }
 
@@ -314,7 +314,7 @@ export default {
   background-color: var(--color-bg-elevated);
   font-size: 13px;
   font-weight: 600;
-  color: #a3a3a3;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -327,7 +327,7 @@ export default {
 .angle-btn.active {
   border-color: var(--color-primary);
   background-color: var(--color-primary);
-  color: #111;
+  color: white;
 }
 
 .action-button {
@@ -346,21 +346,23 @@ export default {
 }
 
 .action-button.primary {
-  background: linear-gradient(135deg, #FF9F1C, #FFB84D);
-  color: #111;
-  box-shadow: 0 4px 16px rgba(255, 159, 28, 0.3);
+  background-color: var(--color-primary);
+  color: white;
+  box-shadow: 0 4px 16px var(--color-primary-glow);
 }
 
 .action-button.primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #FFB84D, #FFD180);
+  background-color: var(--color-primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(255, 159, 28, 0.4);
+  box-shadow: 0 6px 20px var(--color-primary-glow);
 }
 
 .action-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
+  background-color: var(--color-bg-dim);
+  color: var(--color-text-dim);
 }
 
 .btn-icon {
@@ -382,7 +384,7 @@ export default {
 .hint {
   margin: 0;
   padding: 20px;
-  color: #f59e0b;
+  color: var(--color-warning);
   font-size: 13px;
   text-align: center;
   background: rgba(245, 158, 11, 0.1);

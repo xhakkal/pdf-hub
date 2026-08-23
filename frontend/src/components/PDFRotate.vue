@@ -139,14 +139,14 @@ export default {
 
 .section-header h3 {
   margin: 0;
-  color: white;
+  color: var(--color-text);
   font-size: 18px;
   font-weight: 600;
 }
 
 .section-header p {
   margin: 4px 0 0;
-  color: #a3a3a3;
+  color: var(--color-text-muted);
   font-size: 14px;
 }
 
@@ -186,7 +186,7 @@ export default {
 .control-label {
   font-size: 13px;
   font-weight: 600;
-  color: #fff;
+  color: var(--color-text);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -209,7 +209,7 @@ export default {
   background-color: var(--color-bg-elevated);
   font-size: 13px;
   font-weight: 600;
-  color: #a3a3a3;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -217,13 +217,13 @@ export default {
 .rotation-btn:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
-  background: rgba(255, 159, 28, 0.1);
+  background: var(--color-primary-glow);
 }
 
 .rotation-btn.active {
   border-color: var(--color-primary);
   background-color: var(--color-primary);
-  color: #111;
+  color: white;
 }
 
 .rotate-icon {
@@ -236,7 +236,7 @@ export default {
   align-items: center;
   gap: 10px;
   font-size: 14px;
-  color: #a3a3a3;
+  color: var(--color-text-muted);
   cursor: pointer;
 }
 
@@ -270,7 +270,7 @@ export default {
   top: 2px;
   width: 5px;
   height: 10px;
-  border: solid #111;
+  border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -301,7 +301,7 @@ export default {
 .input-hint {
   margin: 0;
   font-size: 12px;
-  color: #737373;
+  color: var(--color-text-dim);
 }
 
 .action-button {
@@ -320,21 +320,23 @@ export default {
 }
 
 .action-button.primary {
-  background: linear-gradient(135deg, #FF9F1C, #FFB84D);
-  color: #111;
-  box-shadow: 0 4px 16px rgba(255, 159, 28, 0.3);
+  background-color: var(--color-primary);
+  color: white;
+  box-shadow: 0 4px 16px var(--color-primary-glow);
 }
 
 .action-button.primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #FFB84D, #FFD180);
+  background-color: var(--color-primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(255, 159, 28, 0.4);
+  box-shadow: 0 6px 20px var(--color-primary-glow);
 }
 
 .action-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
+  background-color: var(--color-bg-dim);
+  color: var(--color-text-dim);
 }
 
 .btn-icon {

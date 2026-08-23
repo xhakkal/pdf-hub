@@ -4,13 +4,17 @@ import axios from 'axios'
 const API_URL = import.meta.env.VITE_API_URL || '/api'
 
 export default {
-  async convertFile(file, formats) {
+  async convertFile(file, formats, turnstileToken = null) {
     const formData = new FormData()
     formData.append('file', file)
 
     formats.forEach(format => {
       formData.append('formats', format)
     })
+
+    if (turnstileToken) {
+      formData.append('turnstile_token', turnstileToken)
+    }
 
     try {
       const response = await axios.post(`${API_URL}/convert`, formData, {

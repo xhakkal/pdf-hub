@@ -1,12 +1,12 @@
 <template>
-  <header class="fixed top-0 w-full z-50 border-b border-neutral-800 shadow-lg bg-[#090909]/95 backdrop-blur-md">
+  <header class="fixed top-0 w-full z-50 border-b border-brand shadow-lg bg-white/95 backdrop-blur-md">
     <div class="max-w-[1180px] mx-auto px-4 md:px-8 h-[68px] flex justify-between items-center">
       <!-- Brand -->
       <div
         @click="$emit('navigate', 'conversor')"
         class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
       >
-        <LogoIcon size="lg" aria-label="PDFhub" />
+        <LogoIcon size="lg" aria-label="PDFhub - Voltar ao início" />
       </div>
 
       <!-- Navigation -->
@@ -16,8 +16,8 @@
           :class="[
             'px-4 py-2 rounded-md font-semibold text-sm transition-all duration-200 active:scale-95',
             activePage === 'conversor'
-              ? 'bg-[#ff9f1c] text-black shadow-[0_0_0_1px_rgba(255,159,28,0.5)]'
-              : 'text-neutral-400 hover:text-white hover:bg-neutral-800'
+              ? 'bg-red text-white shadow-red-glow'
+              : 'text-muted hover:text-red hover:bg-surface-hover'
           ]"
         >
           Conversor
@@ -27,8 +27,8 @@
           :class="[
             'px-4 py-2 rounded-md font-semibold text-sm transition-all duration-200 active:scale-95',
             activePage === 'faq'
-              ? 'bg-[#ff9f1c] text-black shadow-[0_0_0_1px_rgba(255,159,28,0.5)]'
-              : 'text-neutral-400 hover:text-white hover:bg-neutral-800'
+              ? 'bg-red text-white shadow-red-glow'
+              : 'text-muted hover:text-red hover:bg-surface-hover'
           ]"
         >
           FAQ
