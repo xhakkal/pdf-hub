@@ -3,12 +3,12 @@
     <!-- Main Content -->
     <main class="flex-grow max-w-[1180px] w-full mx-auto px-4 md:px-8 pt-[116px] pb-20 flex flex-col gap-10">
       <!-- Hero Section -->
-      <section class="text-center flex flex-col items-center gap-4 max-w-3xl mx-auto">
-        <span class="uppercase tracking-[0.22em] text-xs font-bold text-red">Conversor de arquivos online</span>
-        <h1 class="text-4xl md:text-6xl font-extrabold text-brand tracking-tight leading-tight">
-          Converta qualquer arquivo em <span class="text-red">segundos.</span>
+      <section class="hero-copy text-center flex flex-col items-center gap-4 max-w-3xl mx-auto">
+        <span class="hero-kicker uppercase tracking-[0.22em] text-xs font-bold text-red">Conversor de arquivos online</span>
+        <h1 class="hero-title text-4xl md:text-6xl font-extrabold text-brand tracking-tight leading-tight">
+          Converta qualquer arquivo em <span class="hero-accent text-red">segundos.</span>
         </h1>
-        <p class="text-lg md:text-xl text-muted max-w-xl">
+        <p class="hero-description text-lg md:text-xl text-muted max-w-xl">
           PDF, imagens, Word, Excel, PowerPoint, CSV e muito mais. Arraste, escolha o formato e converta instantaneamente.
         </p>
       </section>
@@ -615,6 +615,37 @@ export default {
 </script>
 
 <style scoped>
+.hero-copy > * {
+  opacity: 0;
+  animation: hero-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-kicker { animation-delay: 80ms; }
+.hero-title { animation-delay: 180ms; }
+.hero-description { animation-delay: 300ms; }
+
+.hero-accent {
+  display: inline-block;
+  animation: accent-breathe 2.8s ease-in-out 900ms infinite;
+}
+
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes accent-breathe {
+  0%, 100% { text-shadow: 0 0 0 var(--color-primary-glow); }
+  50% { text-shadow: 0 0 18px var(--color-primary-glow); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-copy > *, .hero-accent {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 .background {
   background-color: #faf9ff;
 }
