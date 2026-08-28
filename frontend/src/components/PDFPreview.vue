@@ -35,6 +35,10 @@
     </div>
     <div class="preview-canvas-container" @wheel.prevent="handleWheel">
       <canvas ref="canvas" class="preview-canvas"></canvas>
+      <div v-if="previewError" class="preview-error">
+        <p>Não foi possível visualizar este PDF.</p>
+        <span>{{ previewError }}</span>
+      </div>
     </div>
     <div class="preview-thumbnails" v-if="pageCount > 1">
       <button
@@ -110,7 +114,8 @@ export default {
       currentPage: 1,
       pdfUrl: null,
       scale: 1.2,
-      isLoading: false
+      isLoading: false,
+      previewError: ''
     }
   },
   watch: {
@@ -152,10 +157,11 @@ export default {
   methods: {
     async loadPDF(file) {
       this.isLoading = true
+      this.previewError = ''
       try {
         this.pdfUrl = URL.createObjectURL(file)
         const arrayBuffer = await file.arrayBuffer()
-        this.pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+        this.pdfDoc = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise
         this.pageCount = this.pdfDoc.numPages
         this.currentPage = 1
         await nextTick()
@@ -163,6 +169,7 @@ export default {
         this.renderThumbnails()
       } catch (err) {
         console.error('Erro ao carregar PDF:', err)
+        this.previewError = err?.message || 'Arquivo inválido ou não suportado.'
         this.$emit('error', 'Erro ao carregar prévia do PDF')
       } finally {
         this.isLoading = false
@@ -193,6 +200,7 @@ export default {
         }
       } catch (err) {
         console.error('Erro ao renderizar página:', err)
+        this.previewError = err?.message || 'Erro ao renderizar a página.'
       }
     },
     renderWatermark(context, viewport) {
@@ -279,6 +287,7 @@ export default {
       this.pdfDoc = null
       this.pageCount = 0
       this.currentPage = 1
+      this.previewError = ''
     }
   },
   beforeUnmount() {
@@ -381,6 +390,29 @@ export default {
   max-width: 100%;
   height: auto;
   background: #ffffff;
+}
+
+.preview-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  padding: 24px;
+  color: var(--color-error);
+  text-align: center;
+}
+
+.preview-error p {
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+
+.preview-error span {
+  max-width: 420px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
 }
 
 .preview-thumbnails {
