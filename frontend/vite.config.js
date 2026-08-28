@@ -23,10 +23,8 @@ export default defineConfig({
             './src/components/PDFSplit.vue',
             './src/components/PDFRotate.vue',
             './src/components/PDFWatermark.vue',
-            './src/components/PDFProtect.vue',
-            './src/components/PDFPreview.vue'
+            './src/components/PDFProtect.vue'
           ],
-          'pdfjs': ['pdfjs-dist'],
           'vendor': ['axios', 'vue']
         }
       }

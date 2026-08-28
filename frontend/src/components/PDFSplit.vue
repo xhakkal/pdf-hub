@@ -70,24 +70,16 @@
         </button>
       </div>
 
-      <!-- Pré-visualização (Direita) -->
-      <div class="preview-panel">
-        <PDFPreview
-          :file="selectedFile"
-          :selected-pages="getPreviewPages"
-        />
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import FileUploader from './FileUploader.vue'
-import PDFPreview from './PDFPreview.vue'
 
 export default {
   name: 'PDFSplit',
-  components: { FileUploader, PDFPreview },
+  components: { FileUploader },
   data() {
     return {
       selectedFile: null,
@@ -95,12 +87,6 @@ export default {
       pageRanges: '',
       pagesPerFile: 5,
       isProcessing: false
-    }
-  },
-  computed: {
-    getPreviewPages() {
-      if (!this.pageRanges) return []
-      return this.pageRanges.split(',').map(s => s.trim()).filter(Boolean)
     }
   },
   methods: {
@@ -333,14 +319,4 @@ export default {
   height: 20px;
 }
 
-.preview-panel {
-  min-height: 300px;
-}
-
-@media (min-width: 960px) {
-  .preview-panel {
-    position: sticky;
-    top: 88px;
-  }
-}
 </style>

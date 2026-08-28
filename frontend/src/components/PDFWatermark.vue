@@ -92,17 +92,6 @@
         </button>
       </div>
 
-      <!-- Pré-visualização (Direita) -->
-      <div class="preview-panel">
-        <PDFPreview
-          :file="selectedFile"
-          :watermark-text="watermarkText"
-          :watermark-opacity="opacity"
-          :watermark-angle="angle"
-          :watermark-font-size="fontSize"
-          :watermark-color="selectedColor"
-        />
-      </div>
     </div>
 
     <p v-else-if="selectedFile && !watermarkText" class="hint">
@@ -113,11 +102,10 @@
 
 <script>
 import FileUploader from './FileUploader.vue'
-import PDFPreview from './PDFPreview.vue'
 
 export default {
   name: 'PDFWatermark',
-  components: { FileUploader, PDFPreview },
+  components: { FileUploader },
   data() {
     return {
       selectedFile: null,
@@ -368,17 +356,6 @@ export default {
 .btn-icon {
   width: 20px;
   height: 20px;
-}
-
-.preview-panel {
-  min-height: 300px;
-}
-
-@media (min-width: 960px) {
-  .preview-panel {
-    position: sticky;
-    top: 88px;
-  }
 }
 
 .hint {

@@ -108,12 +108,6 @@
         </button>
       </div>
 
-      <!-- Pré-visualização (Direita) -->
-      <div class="preview-panel">
-        <PDFPreview
-          :file="selectedFile"
-        />
-      </div>
     </div>
 
     <p v-else-if="selectedFile && !userPassword" class="hint">
@@ -124,11 +118,10 @@
 
 <script>
 import FileUploader from './FileUploader.vue'
-import PDFPreview from './PDFPreview.vue'
 
 export default {
   name: 'PDFProtect',
-  components: { FileUploader, PDFPreview },
+  components: { FileUploader },
   data() {
     return {
       selectedFile: null,
@@ -429,17 +422,6 @@ export default {
 .btn-icon {
   width: 20px;
   height: 20px;
-}
-
-.preview-panel {
-  min-height: 300px;
-}
-
-@media (min-width: 960px) {
-  .preview-panel {
-    position: sticky;
-    top: 88px;
-  }
 }
 
 .hint {

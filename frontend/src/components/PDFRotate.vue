@@ -60,25 +60,16 @@
         </button>
       </div>
 
-      <!-- Pré-visualização (Direita) -->
-      <div class="preview-panel">
-        <PDFPreview
-          :file="selectedFile"
-          :rotation="previewRotation"
-          :selected-pages="parsedPageNumbers"
-        />
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import FileUploader from './FileUploader.vue'
-import PDFPreview from './PDFPreview.vue'
 
 export default {
   name: 'PDFRotate',
-  components: { FileUploader, PDFPreview },
+  components: { FileUploader },
   data() {
     return {
       selectedFile: null,
@@ -86,15 +77,6 @@ export default {
       specificPages: false,
       pageNumbers: '',
       isProcessing: false
-    }
-  },
-  computed: {
-    previewRotation() {
-      return this.rotation
-    },
-    parsedPageNumbers() {
-      if (!this.specificPages || !this.pageNumbers.trim()) return []
-      return this.pageNumbers.split(',').map(s => s.trim()).filter(Boolean)
     }
   },
   methods: {
@@ -342,16 +324,4 @@ export default {
   height: 20px;
 }
 
-.preview-panel {
-  min-height: 300px;
-  min-width: 0;
-  overflow: hidden;
-}
-
-@media (min-width: 960px) {
-  .preview-panel {
-    position: sticky;
-    top: 88px;
-  }
-}
 </style>
