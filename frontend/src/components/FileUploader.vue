@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import { markRaw } from 'vue'
+
 export default {
   name: 'FileUploader',
   props: {
@@ -90,7 +92,7 @@ export default {
           if (this.selectedFiles.length < this.maxFiles) {
             // Verificar duplicatas
             if (!this.selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
-              this.selectedFiles.push(file)
+              this.selectedFiles.push(markRaw(file))
             }
           }
         }
@@ -98,8 +100,9 @@ export default {
       } else {
         // Modo single - substituir
         if (validFiles.length > 0) {
-          this.selectedFiles = [validFiles[0]]
-          this.$emit('file-selected', validFiles[0])
+          const selectedFile = markRaw(validFiles[0])
+          this.selectedFiles = [selectedFile]
+          this.$emit('file-selected', selectedFile)
         }
       }
     },
