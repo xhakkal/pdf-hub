@@ -13,7 +13,8 @@ export const ADSENSE_CONFIG = {
     footerBanner: '',
     mobileBanner: ''
   },
-  enabled: true  // Desabilitar para testes
+  // Reativar somente em páginas com conteúdo editorial substancial.
+  enabled: false
 }
 
 export const PRICING_PLANS = {

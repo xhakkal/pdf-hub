@@ -1,5 +1,5 @@
 <template>
-  <section v-if="showAds" class="ad-banner">
+  <section v-if="canRenderAds" class="ad-banner">
     <span class="ad-label">Publicidade</span>
     <ins
       v-if="slot"
@@ -34,6 +34,9 @@ export default {
         return ''
       }
       return ADSENSE_CONFIG.adSlots[this.placement] || ''
+    },
+    canRenderAds() {
+      return this.showAds && ADSENSE_CONFIG.enabled && Boolean(this.slot)
     }
   },
   props: {
@@ -42,7 +45,7 @@ export default {
   },
   mounted() {
     // Carregar anúncios do Google AdSense
-    if (window.adsbygoogle && this.showAds && this.slot) {
+    if (window.adsbygoogle && this.canRenderAds) {
       try {
         (adsbygoogle = window.adsbygoogle || []).push({})
       } catch (e) { /* O AdSense pode carregar após o componente. */ }

@@ -1,10 +1,12 @@
 import os
 import uuid
+import logging
 from datetime import datetime, timedelta
 from pathlib import Path
 
 TEMP_DIR = os.path.abspath(os.getenv('TEMP_DIR', './temp'))
 MAX_FILE_SIZE = int(os.getenv('MAX_FILE_SIZE', 52428800))  # 50MB default
+logger = logging.getLogger(__name__)
 
 # Extensões permitidas e seus magic bytes de validação (quando aplicável)
 ALLOWED_EXTENSIONS = {
@@ -88,7 +90,7 @@ def cleanup_temp():
             if file_time < cutoff_time:
                 os.remove(filepath)
         except Exception as e:
-            print(f"Erro ao deletar {filepath}: {e}")
+            logger.error("Erro ao deletar %s: %s", filepath, e)
 
 def remove_file(filepath):
     """Remove arquivo específico."""
@@ -96,7 +98,7 @@ def remove_file(filepath):
         if os.path.exists(filepath):
             os.remove(filepath)
     except Exception as e:
-        print(f"Erro ao remover {filepath}: {e}")
+        logger.error("Erro ao remover %s: %s", filepath, e)
 
 def create_output_dir():
     """Cria diretório para arquivos de saída."""

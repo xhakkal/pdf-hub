@@ -1,9 +1,0 @@
-Vamos mudar apenas as cores do site, será apenas branco e vermelho.
-Vamos usar recaptcha do cloudflare.
-Tem box entrando em outras box no ferramentas.
-Use a nova logo como favicon e logo.
-Ao clicar na logo retornar para home.
-No rodapé ao invés de xakal vamos usar ²E.tech.
-Ainda no rodapé adicione a versão do site.
-Essa atualização é a 1.5 
-Adicione arquivos inúteis no .gitignore.

@@ -13,9 +13,6 @@
         </p>
       </section>
 
-      <!-- Advertisement Banner -->
-      <AdBanner :show-ads="true" placement="headerBanner" />
-
       <!-- Tab Selector -->
       <div class="flex justify-center">
         <div class="inline-flex bg-surface border border-brand rounded-lg p-1 gap-1 shadow-lg">
@@ -314,8 +311,6 @@
         </aside>
       </section>
 
-      <!-- Bottom Advertisement Banner -->
-      <AdBanner :show-ads="true" placement="footerBanner" />
     </main>
   </div>
 </template>
@@ -323,7 +318,6 @@
 <script>
 import { defineAsyncComponent } from 'vue'
 import ConversionStatus from '../components/ConversionStatus.vue'
-import AdBanner from '../components/AdBanner.vue'
 import Turnstile from '../components/Turnstile.vue'
 import conversionService from '../services/conversionService.js'
 
@@ -338,7 +332,6 @@ export default {
   name: 'ConverterPage',
   components: {
     ConversionStatus,
-    AdBanner,
     Turnstile,
     PDFMerge,
     PDFSplit,

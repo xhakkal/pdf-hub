@@ -65,5 +65,4 @@ if __name__ == '__main__':
     start_cleanup_scheduler()
 
     port = int(os.getenv('FLASK_PORT', 5000))
-    print(f"PDF HOUSE API v2.0 - engine=pymupdf - port={port}")
     app.run(debug=False, host='0.0.0.0', port=port)

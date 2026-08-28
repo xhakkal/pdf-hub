@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, send_file
 import os
 import zipfile
-import traceback
+import logging
 import requests
 from pathlib import Path
 
@@ -11,6 +11,7 @@ from converters.document_converter import DocumentConverter
 from utils.file_handler import save_upload, remove_file, create_output_dir, get_file_extension
 
 conversion_bp = Blueprint('conversion', __name__, url_prefix='/api')
+logger = logging.getLogger(__name__)
 
 # Turnstile secret key (configure via environment variable)
 TURNSTILE_SECRET_KEY = os.environ.get('TURNSTILE_SECRET_KEY', '')
@@ -35,7 +36,7 @@ def verify_turnstile(token):
         result = response.json()
         return result.get('success', False)
     except Exception as e:
-        print(f"Turnstile verification error: {e}")
+        logger.error("Turnstile verification error: %s", e)
         return False
 
 # Formatos de saída disponíveis por extensão do arquivo de entrada
@@ -187,8 +188,7 @@ def convert_file():
         return send_file(zip_path, as_attachment=True, download_name=zip_filename)
 
     except Exception as e:
-        print(f"ERRO GERAL NA CONVERSÃO: {str(e)}")
-        print(traceback.format_exc())
+        logger.exception("ERRO GERAL NA CONVERSÃO")
         remove_file(filepath)
         return jsonify({'error': f'Erro no servidor: {str(e)}'}), 500
 
@@ -249,8 +249,7 @@ def merge_pdfs():
     except Exception as e:
         for fp in filepaths:
             remove_file(fp)
-        print(f"ERRO MERGE: {str(e)}")
-        print(traceback.format_exc())
+        logger.exception("ERRO MERGE")
         return jsonify({'error': f'Erro no servidor: {str(e)}'}), 500
 
 
@@ -318,8 +317,7 @@ def split_pdf():
 
     except Exception as e:
         remove_file(filepath)
-        print(f"ERRO SPLIT: {str(e)}")
-        print(traceback.format_exc())
+        logger.exception("ERRO SPLIT")
         return jsonify({'error': f'Erro no servidor: {str(e)}'}), 500
 
 
@@ -366,8 +364,7 @@ def rotate_pdf():
 
     except Exception as e:
         remove_file(filepath)
-        print(f"ERRO ROTATE: {str(e)}")
-        print(traceback.format_exc())
+        logger.exception("ERRO ROTATE")
         return jsonify({'error': f'Erro no servidor: {str(e)}'}), 500
 
 
@@ -409,8 +406,7 @@ def watermark_pdf():
 
     except Exception as e:
         remove_file(filepath)
-        print(f"ERRO WATERMARK: {str(e)}")
-        print(traceback.format_exc())
+        logger.exception("ERRO WATERMARK")
         return jsonify({'error': f'Erro no servidor: {str(e)}'}), 500
 
 
@@ -458,6 +454,5 @@ def protect_pdf():
 
     except Exception as e:
         remove_file(filepath)
-        print(f"ERRO PROTECT: {str(e)}")
-        print(traceback.format_exc())
+        logger.exception("ERRO PROTECT")
         return jsonify({'error': f'Erro no servidor: {str(e)}'}), 500
