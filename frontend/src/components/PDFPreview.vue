@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="preview-canvas-container" @wheel.prevent="handleWheel">
-      <canvas ref="canvas" class="preview-canvas"></canvas>
+      <canvas v-if="!previewError" ref="canvas" class="preview-canvas"></canvas>
       <div v-if="previewError" class="preview-error">
         <p>Não foi possível visualizar este PDF.</p>
         <span>{{ previewError }}</span>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { nextTick } from 'vue'
+import { nextTick, toRaw } from 'vue'
 import * as pdfjsLib from 'pdfjs-dist'
 import workerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 
@@ -159,8 +159,9 @@ export default {
       this.isLoading = true
       this.previewError = ''
       try {
-        this.pdfUrl = URL.createObjectURL(file)
-        const arrayBuffer = await file.arrayBuffer()
+        const rawFile = toRaw(file)
+        this.pdfUrl = URL.createObjectURL(rawFile)
+        const arrayBuffer = await rawFile.arrayBuffer()
         this.pdfDoc = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise
         this.pageCount = this.pdfDoc.numPages
         this.currentPage = 1
@@ -301,6 +302,8 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
+  min-width: 0;
   overflow: hidden;
 }
 
@@ -380,6 +383,8 @@ export default {
   min-height: 300px;
   max-height: 500px;
   padding: 20px;
+  width: 100%;
+  min-width: 0;
   background: var(--color-surface);
   overflow: auto;
 }
@@ -398,6 +403,7 @@ export default {
   align-items: center;
   justify-content: center;
   min-height: 180px;
+  width: 100%;
   padding: 24px;
   color: var(--color-error);
   text-align: center;

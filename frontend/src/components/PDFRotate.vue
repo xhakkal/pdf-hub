@@ -154,6 +154,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
+  min-width: 0;
 }
 
 @media (min-width: 960px) {
@@ -343,6 +344,8 @@ export default {
 
 .preview-panel {
   min-height: 300px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 @media (min-width: 960px) {
