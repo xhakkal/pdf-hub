@@ -167,10 +167,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px;
-  background-color: var(--color-surface);
-  border-radius: 12px;
-  border: 1px solid var(--color-border);
+  padding: 4px 0;
   position: sticky;
   top: 88px;
   max-height: calc(100vh - 120px);

@@ -62,7 +62,9 @@
 <script>
 import { nextTick } from 'vue'
 import * as pdfjsLib from 'pdfjs-dist'
-import 'pdfjs-dist/build/pdf.worker.min.mjs'
+import workerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc
 
 export default {
   name: 'PDFPreview',
@@ -290,9 +292,6 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
   overflow: hidden;
 }
 
@@ -306,14 +305,14 @@ export default {
   justify-content: space-between;
   padding: 12px 16px;
   border-bottom: 1px solid var(--color-border);
-  background: rgba(255, 159, 28, 0.05);
+  background: var(--color-surface);
 }
 
 .preview-header h4 {
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: #fff;
+  color: var(--color-text);
 }
 
 .preview-controls {
@@ -331,7 +330,7 @@ export default {
   border: 1px solid var(--color-border);
   border-radius: 6px;
   background: var(--color-bg);
-  color: #a3a3a3;
+  color: var(--color-text-muted);
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -339,7 +338,7 @@ export default {
 .preview-btn:hover:not(.disabled) {
   border-color: var(--color-primary);
   color: var(--color-primary);
-  background: rgba(255, 159, 28, 0.1);
+  background: var(--color-primary-light);
 }
 
 .preview-btn.disabled {
@@ -355,7 +354,7 @@ export default {
 .page-indicator {
   font-size: 13px;
   font-weight: 500;
-  color: #fff;
+  color: var(--color-text);
   min-width: 60px;
   text-align: center;
 }
@@ -372,7 +371,7 @@ export default {
   min-height: 300px;
   max-height: 500px;
   padding: 20px;
-  background: #f5f5f5;
+  background: var(--color-surface);
   overflow: auto;
 }
 
@@ -414,7 +413,7 @@ export default {
 
 .thumb.active {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(255, 159, 28, 0.2);
+  box-shadow: 0 0 0 2px var(--color-primary-glow);
 }
 
 .thumb-canvas {
@@ -425,7 +424,7 @@ export default {
 .thumb-num {
   font-size: 10px;
   font-weight: 600;
-  color: #a3a3a3;
+  color: var(--color-text-muted);
 }
 
 .thumb.active .thumb-num {
@@ -438,7 +437,7 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  color: #666;
+  color: var(--color-text-muted);
   text-align: center;
   min-height: 200px;
 }
@@ -446,7 +445,7 @@ export default {
 .empty-state svg {
   width: 48px;
   height: 48px;
-  color: #333;
+  color: var(--color-text-dim);
   margin-bottom: 12px;
 }
 
@@ -454,7 +453,7 @@ export default {
   margin: 0 0 4px;
   font-size: 14px;
   font-weight: 500;
-  color: #888;
+  color: var(--color-text-muted);
 }
 
 .empty-state span {
