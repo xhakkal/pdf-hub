@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { nextTick } from 'vue'
 import * as pdfjsLib from 'pdfjs-dist'
 import 'pdfjs-dist/build/pdf.worker.min.mjs'
 
@@ -121,8 +122,9 @@ export default {
         }
       }
     },
-    rotation() {
-      this.renderPage()
+    async rotation() {
+      await this.renderPage()
+      await this.renderThumbnails()
     },
     watermarkText() {
       this.renderPage()
@@ -154,6 +156,7 @@ export default {
         this.pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
         this.pageCount = this.pdfDoc.numPages
         this.currentPage = 1
+        await nextTick()
         await this.renderPage()
         this.renderThumbnails()
       } catch (err) {
@@ -166,9 +169,10 @@ export default {
     async renderPage() {
       if (!this.pdfDoc) return
       try {
+        await nextTick()
         const page = await this.pdfDoc.getPage(this.currentPage)
         const canvas = this.$refs.canvas
-        const container = this.$refs.canvas.parentElement
+        if (!canvas) return
         const viewport = page.getViewport({ scale: this.scale, rotation: this.rotation })
 
         canvas.width = viewport.width
@@ -230,9 +234,10 @@ export default {
     async renderThumbnails() {
       if (!this.pdfDoc || this.pageCount <= 1) return
 
+      await nextTick()
       for (let i = 1; i <= this.pageCount; i++) {
         const page = await this.pdfDoc.getPage(i)
-        const viewport = page.getViewport({ scale: 0.3 })
+        const viewport = page.getViewport({ scale: 0.3, rotation: this.rotation })
         const canvas = this.$el.querySelector(`.thumb-canvas[data-page="${i}"]`)
         if (canvas) {
           canvas.width = viewport.width
