@@ -92,7 +92,7 @@ export default {
           if (this.selectedFiles.length < this.maxFiles) {
             // Verificar duplicatas
             if (!this.selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
-              this.selectedFiles.push(markRaw(file))
+              this.selectedFiles.push(this.normalizeFile(file))
             }
           }
         }
@@ -100,7 +100,7 @@ export default {
       } else {
         // Modo single - substituir
         if (validFiles.length > 0) {
-          const selectedFile = markRaw(validFiles[0])
+          const selectedFile = this.normalizeFile(validFiles[0])
           this.selectedFiles = [selectedFile]
           this.$emit('file-selected', selectedFile)
         }
@@ -136,6 +136,12 @@ export default {
       } else {
         this.$emit('file-selected', null)
       }
+    },
+    normalizeFile(file) {
+      return markRaw(new File([file], file.name, {
+        type: file.type,
+        lastModified: file.lastModified
+      }))
     },
     formatFileSize(bytes) {
       if (bytes === 0) return '0 Bytes'
