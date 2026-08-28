@@ -209,7 +209,28 @@
                     : 'border-brand bg-surface text-brand hover:border-red hover:bg-surface-hover'
                 ]"
               >
-                <span class="text-2xl">{{ tool.emoji }}</span>
+                <svg v-if="tool.id === 'merge'" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7 3h7l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" />
+                  <path stroke-linecap="round" d="M14 3v5h5M8 13h6m-6 4h6" />
+                </svg>
+                <svg v-else-if="tool.id === 'split'" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <circle cx="6" cy="6" r="2.5" />
+                  <circle cx="6" cy="18" r="2.5" />
+                  <path stroke-linecap="round" d="m8.2 7.4 9.8 9.2M8.2 16.6 12 13m0 0 6-6" />
+                </svg>
+                <svg v-else-if="tool.id === 'rotate'" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v5h5M20 17v-5h-5" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.3 12A6 6 0 0 1 17 7.2L20 10M18 12a6 6 0 0 1-10.7 4.8L4 14" />
+                </svg>
+                <svg v-else-if="tool.id === 'watermark'" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3.5S6.5 9.2 6.5 13.5a5.5 5.5 0 0 0 11 0C17.5 9.2 12 3.5 12 3.5Z" />
+                  <path stroke-linecap="round" d="M9.5 16a3 3 0 0 0 4.5.5" />
+                </svg>
+                <svg v-else class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3 5 6v5c0 4.4 2.8 8.4 7 10 4.2-1.6 7-5.6 7-10V6l-7-3Z" />
+                  <rect width="5" height="4.5" x="9.5" y="10" rx="1" />
+                  <path stroke-linecap="round" d="M11 10V8.8a1 1 0 0 1 2 0V10" />
+                </svg>
                 <span>{{ tool.name }}</span>
               </button>
             </div>
@@ -351,11 +372,11 @@ export default {
       toolEstimatedTime: null,
       toolProgressInterval: null,
       pdfTools: [
-        { id: 'merge', name: 'Unir PDFs', emoji: '📄' },
-        { id: 'split', name: 'Dividir', emoji: '✂️' },
-        { id: 'rotate', name: 'Rotacionar', emoji: '🔄' },
-        { id: 'watermark', name: 'Marca d\'Água', emoji: '💧' },
-        { id: 'protect', name: 'Proteger', emoji: '🔒' }
+        { id: 'merge', name: 'Unir PDFs' },
+        { id: 'split', name: 'Dividir' },
+        { id: 'rotate', name: 'Rotacionar' },
+        { id: 'watermark', name: 'Marca d\'Água' },
+        { id: 'protect', name: 'Proteger' }
       ],
       // Conversion
       selectedFile: null,

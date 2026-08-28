@@ -7,7 +7,7 @@
         <p class="text-sm text-muted">© 2026 PDFhub. Processamento seguro de arquivos. Limite de 50MB por conversão.</p>
         <div class="flex flex-col gap-1 text-xs text-dim">
           <span>Versão 1.5</span>
-          <button class="credit" type="button" @click="revealCreator">²E.tech <span v-if="showCreator">· eliel</span></button>
+          <span class="credit">Prod by E²</span>
         </div>
       </div>
 
@@ -39,34 +39,12 @@
 <script>
 export default {
   name: 'Footer',
-  data() {
-    return { showCreator: false, revealTimer: null }
-  },
-  beforeUnmount() {
-    clearTimeout(this.revealTimer)
-  },
-  methods: {
-    revealCreator() {
-      this.showCreator = true
-      clearTimeout(this.revealTimer)
-      this.revealTimer = setTimeout(() => { this.showCreator = false }, 2800)
-    }
-  }
 }
 </script>
 
 <style scoped>
 .credit {
-  width: fit-content;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: #9ca3af;
+  color: var(--color-text-muted);
   font-size: 0.72rem;
-  cursor: pointer;
-  transition: color 160ms ease;
 }
-
-.credit:hover, .credit:focus-visible { color: var(--color-primary); }
-.credit span { color: var(--color-primary); }
 </style>

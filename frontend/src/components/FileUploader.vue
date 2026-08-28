@@ -167,7 +167,7 @@ export default {
 
 .upload-area.drag-over {
   border-color: var(--color-primary);
-  background-color: rgba(249, 115, 22, 0.1);
+  background-color: var(--color-primary-light);
   transform: scale(1.02);
 }
 
@@ -180,14 +180,14 @@ export default {
 
 .upload-area h3 {
   margin: 0 0 8px;
-  color: white;
+  color: var(--color-text);
   font-size: 18px;
   font-weight: 600;
 }
 
 .upload-area p {
   margin: 8px 0;
-  color: #a3a3a3;
+  color: var(--color-text-muted);
   font-size: 14px;
 }
 
@@ -243,7 +243,7 @@ export default {
 
 .file-name {
   flex: 1;
-  color: white;
+  color: var(--color-text);
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -251,7 +251,7 @@ export default {
 }
 
 .file-size {
-  color: #737373;
+  color: var(--color-text-muted);
   font-size: 12px;
   flex-shrink: 0;
 }
@@ -275,7 +275,7 @@ export default {
 }
 
 .remove-file:hover {
-  background-color: #dc2626;
+  background-color: var(--color-primary-hover);
 }
 
 .file-count {
