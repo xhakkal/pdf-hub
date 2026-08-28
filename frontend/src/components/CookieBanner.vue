@@ -1,16 +1,16 @@
 <template>
   <div
     v-if="showBanner"
-    class="fixed bottom-0 left-0 right-0 z-40 bg-black border-t border-orange-500/30 shadow-2xl"
+    class="fixed bottom-4 right-4 z-40 w-[min(380px,calc(100vw-2rem))] bg-elevated border border-brand rounded-xl shadow-2xl"
   >
-    <div class="max-w-[1120px] mx-auto px-4 md:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="p-4 flex flex-col gap-3">
       <!-- Texto -->
-      <div class="flex-1">
-        <p class="text-sm text-neutral-400">
-          Usamos cookies para melhorar sua experiência e analisar o uso do site. Ao continuar navegando, você concorda com nossa
+      <div>
+        <p class="text-sm text-muted leading-relaxed">
+          Usamos cookies para melhorar sua experiência. Consulte nossa
           <button
             @click="$emit('navigate', 'privacidade')"
-            class="text-orange-400 hover:text-orange-300 underline cursor-pointer"
+            class="text-red hover:text-red underline cursor-pointer"
           >
             política de privacidade
           </button>
@@ -18,16 +18,16 @@
       </div>
 
       <!-- Botões -->
-      <div class="flex gap-3 flex-shrink-0">
+      <div class="flex justify-end gap-2">
         <button
           @click="rejectCookies"
-          class="px-4 py-2 rounded-lg border border-neutral-700 text-neutral-300 hover:bg-neutral-800 transition-all text-sm font-medium"
+          class="px-3 py-2 rounded-md border border-brand text-muted hover:bg-surface-hover transition-all text-sm font-medium"
         >
           Rejeitar
         </button>
         <button
           @click="acceptCookies"
-          class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-400 text-white transition-all text-sm font-medium"
+          class="px-3 py-2 rounded-md bg-red hover-bg-red text-white transition-all text-sm font-medium"
         >
           Aceitar
         </button>
